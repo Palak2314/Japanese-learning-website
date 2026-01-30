@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiragana Table</title>
+    <link rel="stylesheet" href="hiragana.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e9f5ff; /* Soft blue background */
+        }
+
+        header {
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border-bottom: 5px solid #0056b3;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin: 0;
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .hiragana-table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            background: #ffffff;
+        }
+
+        .hiragana-table th, .hiragana-table td {
+            border: 1px solid #ddd;
+            padding: 30px;
+            text-align: center;
+            font-size: 2.5em;
+            background: #f2faff;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .hiragana-table th {
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .hiragana-table td:hover {
+            background: #e1f5fe;
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .pronunciation {
+            display: block;
+            font-size: 0.6em;
+            color: #555;
+            margin-top: 10px;
+            cursor: pointer; /* Pointer cursor for clickable elements */
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            font-size: 0.9em;
+        }
+
+        footer p {
+            margin: 5px 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+        }
+
+        .popup-content {
+            background-color: #fff;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 10px;
+            border: 1px solid #888;
+            width: 25%; /* Could be more or less, depending on screen size */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .popup-gif {
+            max-width: 100%; /* Responsive GIF */
+            height: auto; /* Maintain aspect ratio */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Hiragana Characters</h1>
+    </header>
+
+    <main>
+        <table class="hiragana-table">
+            <thead>
+                <tr>
+                    <th>あ<br><span class="pronunciation" data-gif="gifs/a.gif">a</span></th>
+                    <th>い<br><span class="pronunciation" data-gif="gifs/i.gif">i</span></th>
+                    <th>う<br><span class="pronunciation" data-gif="gifs/u.gif">u</span></th>
+                    <th>え<br><span class="pronunciation" data-gif="gifs/e.gif">e</span></th>
+                    <th>お<br><span class="pronunciation" data-gif="gifs/o.gif">o</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>か<br><span class="pronunciation" data-gif="gifs/ka.gif">ka</span></td>
+                    <td>き<br><span class="pronunciation" data-gif="gifs/ki.gif">ki</span></td>
+                    <td>く<br><span class="pronunciation" data-gif="gifs/ku.gif">ku</span></td>
+                    <td>け<br><span class="pronunciation" data-gif="gifs/ke.gif">ke</span></td>
+                    <td>こ<br><span class="pronunciation" data-gif="gifs/ko.gif">ko</span></td>
+                </tr>
+                <tr>
+                    <td>が<br><span class="ng">ga</span></td>
+                    <td>ぎ<br><span class="ng">gi</span></td>
+                    <td>ぐ<br><span class="ng">gu</span></td>
+                    <td>げ<br><span class="ng">ge</span></td>
+                    <td>ご<br><span class="ng">go</span></td>
+                </tr>
+                <tr>
+                    <td>さ<br><span class="pronunciation" data-gif="gifs/sa.gif">sa</span></td>
+                    <td>し<br><span class="pronunciation" data-gif="gifs/shi.gif">shi</span></td>
+                    <td>す<br><span class="pronunciation" data-gif="gifs/su.gif">su</span></td>
+                    <td>せ<br><span class="pronunciation" data-gif="gifs/se.gif">se</span></td>
+                    <td>そ<br><span class="pronunciation" data-gif="gifs/so.gif">so</span></td>
+                </tr>
+                <tr>
+                    <td>ざ<br><span class="ng" >za</span></td>
+                    <td>じ<br><span class="ng" >ji</span></td>
+                    <td>ず<br><span class="ng" >zu</span></td>
+                    <td>ぜ<br><span class="ng" >ze</span></td>
+                    <td>ぞ<br><span class="ng" >zo</span></td>
+                </tr>                
+                <tr>
+                    <td>た<br><span class="pronunciation" data-gif="gifs/ta.gif">ta</span></td>
+                    <td>ち<br><span class="pronunciation" data-gif="gifs/chi.gif">chi</span></td>
+                    <td>つ<br><span class="pronunciation" data-gif="gifs/tsu.gif">tsu</span></td>
+                    <td>て<br><span class="pronunciation" data-gif="gifs/te.gif">te</span></td>
+                    <td>と<br><span class="pronunciation" data-gif="gifs/to.gif">to</span></td>
+                </tr>
+                <tr>
+                    <td>な<br><span class="pronunciation" data-gif="gifs/na.gif">na</span></td>
+                    <td>に<br><span class="pronunciation" data-gif="gifs/ni.gif">ni</span></td>
+                    <td>ぬ<br><span class="pronunciation" data-gif="gifs/nu.gif">nu</span></td>
+                    <td>ね<br><span class="pronunciation" data-gif="gifs/ne.gif">ne</span></td>
+                    <td>の<br><span class="pronunciation" data-gif="gifs/no.gif">no</span></td>
+                </tr>
+                <tr>
+                    <td>は<br><span class="pronunciation" data-gif="gifs/ha.gif">ha</span></td>
+                    <td>ひ<br><span class="pronunciation" data-gif="gifs/hi.gif">hi</span></td>
+                    <td>ふ<br><span class="pronunciation" data-gif="gifs/fu.gif">fu</span></td>
+                    <td>へ<br><span class="pronunciation" data-gif="gifs/he.gif">he</span></td>
+                    <td>ほ<br><span class="pronunciation" data-gif="gifs/ho.gif">ho</span></td>
+                </tr>
+                <tr>
+                    <td>ま<br><span class="pronunciation" data-gif="gifs/ma.gif">ma</span></td>
+                    <td>み<br><span class="pronunciation" data-gif="gifs/mi.gif">mi</span></td>
+                    <td>む<br><span class="pronunciation" data-gif="gifs/mu.gif">mu</span></td>
+                    <td>め<br><span class="pronunciation" data-gif="gifs/me.gif">me</span></td>
+                    <td>も<br><span class="pronunciation" data-gif="gifs/mo.gif">mo</span></td>
+                </tr>
+                <tr>
+                    <td>や<br><span class="pronunciation" data-gif="gifs/ya.gif">ya</span></td>
+                    <td></td> <!-- Empty cell for spacing -->
+                    <td>ゆ<br><span class="pronunciation" data-gif="gifs/yu.gif">yu</span></td>
+                    <td></td> <!-- Empty cell for spacing -->
+                    <td>よ<br><span class="pronunciation" data-gif="gifs/yo.gif">yo</span></td>
+                </tr>
+                <tr>
+                    <td>ら<br><span class="pronunciation" data-gif="gifs/ra.gif">ra</span></td>
+                    <td>り<br><span class="pronunciation" data-gif="gifs/ri.gif">ri</span></td>
+                    <td>る<br><span class="pronunciation" data-gif="gifs/ru.gif">ru</span></td>
+                    <td>れ<br><span class="pronunciation" data-gif="gifs/re.gif">re</span></td>
+                    <td>ろ<br><span class="pronunciation" data-gif="gifs/ro.gif">ro</span></td>
+                </tr>
+                <tr>
+                    <td>わ<br><span class="pronunciation" data-gif="gifs/wa.gif">wa</span></td>
+                    <td></td> <!-- Empty cell for spacing -->
+                    <td></td> <!-- Empty cell for spacing -->
+                    <td></td> <!-- Empty cell for spacing -->
+                    <td>を<br><span class="pronunciation" data-gif="gifs/wo.gif">wo</span></td>
+                </tr>
+                <tr>
+                    <td>ん<br><span class="pronunciation" data-gif="gifs/n.gif">n</span></td>
+                    <td></td> <!-- Empty cell for spacing -->
+                    <td></td> <!-- Empty cell for spacing -->
+                    <td></td> <!-- Empty cell for spacing -->
+                    <td></td> <!-- Empty cell for spacing -->
+                </tr>
+                    
+                <!-- Add more characters as needed -->
+            </tbody>
+        </table>
+    </main>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
+            <img src="" alt="Learning GIF" class="popup-gif" id="popup-gif" />
+            <p></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy;面白い日本語 2024 Japanese Language. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const popup = document.getElementById("popup");
+        const closeBtn = document.querySelector(".close-btn");
+        const popupGif = document.getElementById("popup-gif");
+
+        // Function to show the popup with the specific GIF
+        function showPopup(gifSrc) {
+            popupGif.src = gifSrc; // Set the GIF source
+            popup.style.display = "block"; // Show the popup
+        }
+
+        // Function to close the popup
+        function closePopup() {
+            popup.style.display = "none";
+        }
+
+        // Attach event listeners to pronunciation elements
+        document.querySelectorAll('.pronunciation').forEach(item => {
+            item.addEventListener('click', () => {
+                const gifSrc = item.getAttribute('data-gif'); // Get the GIF path
+                showPopup(gifSrc); // Show the popup with the GIF
+            });
+        });
+
+        // Close the popup when the close button is clicked
+        closeBtn.addEventListener('click', closePopup);
+
+        // Close the popup when clicking outside of it
+        window.addEventListener('click', (event) => {
+            if (event.target === popup) {
+                closePopup();
+            }
+        });
+    </script>
+</body>
+</html>

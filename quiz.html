@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Random Hiragana and Katakana Quiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link href="quiz.css" rel="stylesheet">
+</head>
+<body>
+    <div class="quiz-container">
+        <h2 class="quiz-title">Random Quiz</h2>
+        <div id="quiz">
+            <p class="question-text" id="question">Question will appear here</p>
+            <div class="options">
+                <label class="form-check-label">
+                    <input type="radio" name="answer" value="0" class="form-check-input"> Option 1
+                </label>
+                <label class="form-check-label">
+                    <input type="radio" name="answer" value="1" class="form-check-input"> Option 2
+                </label>
+                <label class="form-check-label">
+                    <input type="radio" name="answer" value="2" class="form-check-input"> Option 3
+                </label>
+                <label class="form-check-label">
+                    <input type="radio" name="answer" value="3" class="form-check-input"> Option 4
+                </label>
+            </div>
+            <button class="submit-btn" onclick="submitAnswer()">Submit Answer</button>
+            <p id="result"></p>
+        </div>
+    </div>
+
+    <script>
+        const hiraganaSet = [
+            { character: "あ", romaji: "a" },
+            { character: "い", romaji: "i" },
+            { character: "う", romaji: "u" },
+            { character: "え", romaji: "e" },
+            { character: "お", romaji: "o" },
+            { character: "か", romaji: "ka" },
+            { character: "き", romaji: "ki" },
+            { character: "く", romaji: "ku" },
+            { character: "け", romaji: "ke" },
+            { character: "こ", romaji: "ko" },
+            { character: "さ", romaji: "sa" },
+            { character: "し", romaji: "shi" },
+            { character: "す", romaji: "su" },
+            { character: "せ", romaji: "se" },
+            { character: "そ", romaji: "so" },
+            { character: "た", romaji: "ta" },
+            { character: "ち", romaji: "chi" },
+            { character: "つ", romaji: "tsu" },
+            { character: "て", romaji: "te" },
+            { character: "と", romaji: "to" },
+            { character: "な", romaji: "na" },
+            { character: "に", romaji: "ni" },
+            { character: "ぬ", romaji: "nu" },
+            { character: "ね", romaji: "ne" },
+            { character: "の", romaji: "no" },
+            { character: "は", romaji: "ha" },
+            { character: "ひ", romaji: "hi" },
+            { character: "ふ", romaji: "fu" },
+            { character: "へ", romaji: "he" },
+            { character: "ほ", romaji: "ho" },
+            { character: "ま", romaji: "ma" },
+            { character: "み", romaji: "mi" },
+            { character: "む", romaji: "mu" },
+            { character: "め", romaji: "me" },
+            { character: "も", romaji: "mo" },
+            { character: "や", romaji: "ya" },
+            { character: "ゆ", romaji: "yu" },
+            { character: "よ", romaji: "yo" },
+            { character: "ら", romaji: "ra" },
+            { character: "り", romaji: "ri" },
+            { character: "る", romaji: "ru" },
+            { character: "れ", romaji: "re" },
+            { character: "ろ", romaji: "ro" },
+            { character: "わ", romaji: "wa" },
+            { character: "を", romaji: "wo" },
+            { character: "ん", romaji: "n" }
+        ];
+
+        const katakanaSet = [
+            { character: "ア", romaji: "a" },
+            { character: "イ", romaji: "i" },
+            { character: "ウ", romaji: "u" },
+            { character: "エ", romaji: "e" },
+            { character: "オ", romaji: "o" },
+            { character: "カ", romaji: "ka" },
+            { character: "キ", romaji: "ki" },
+            { character: "ク", romaji: "ku" },
+            { character: "ケ", romaji: "ke" },
+            { character: "コ", romaji: "ko" },
+            { character: "サ", romaji: "sa" },
+            { character: "シ", romaji: "shi" },
+            { character: "ス", romaji: "su" },
+            { character: "セ", romaji: "se" },
+            { character: "ソ", romaji: "so" },
+            { character: "タ", romaji: "ta" },
+            { character: "チ", romaji: "chi" },
+            { character: "ツ", romaji: "tsu" },
+            { character: "テ", romaji: "te" },
+            { character: "ト", romaji: "to" },
+            { character: "ナ", romaji: "na" },
+            { character: "ニ", romaji: "ni" },
+            { character: "ヌ", romaji: "nu" },
+            { character: "ネ", romaji: "ne" },
+            { character: "ノ", romaji: "no" },
+            { character: "ハ", romaji: "ha" },
+            { character: "ヒ", romaji: "hi" },
+            { character: "フ", romaji: "fu" },
+            { character: "ヘ", romaji: "he" },
+            { character: "ホ", romaji: "ho" },
+            { character: "マ", romaji: "ma" },
+            { character: "ミ", romaji: "mi" },
+            { character: "ム", romaji: "mu" },
+            { character: "メ", romaji: "me" },
+            { character: "モ", romaji: "mo" },
+            { character: "ヤ", romaji: "ya" },
+            { character: "ユ", romaji: "yu" },
+            { character: "ヨ", romaji: "yo" },
+            { character: "ラ", romaji: "ra" },
+            { character: "リ", romaji: "ri" },
+            { character: "ル", romaji: "ru" },
+            { character: "レ", romaji: "re" },
+            { character: "ロ", romaji: "ro" },
+            { character: "ワ", romaji: "wa" },
+            { character: "ヲ", romaji: "wo" },
+            { character: "ン", romaji: "n" }
+        ];
+
+        const combinedSet = [...hiraganaSet, ...katakanaSet];
+
+        let currentQuestion = {};
+        let options = [];
+
+        function loadQuestion() {
+            currentQuestion = combinedSet[Math.floor(Math.random() * combinedSet.length)];
+            options = [...combinedSet];
+            options = options.sort(() => Math.random() - 0.5).slice(0, 4);
+            if (!options.some(option => option.romaji === currentQuestion.romaji)) {
+                options[Math.floor(Math.random() * 4)] = currentQuestion;
+            }
+            document.getElementById("question").innerText = `Which is the correct romaji for '${currentQuestion.character}'?`;
+            document.querySelectorAll(".form-check-label").forEach((label, index) => {
+                label.querySelector(".form-check-input").checked = false;
+                label.querySelector(".form-check-input").value = options[index].romaji;
+                label.querySelector(".form-check-input").nextSibling.nodeValue = options[index].romaji;
+            });
+            document.getElementById("result").innerText = '';
+        }
+
+        function submitAnswer() {
+            const selectedOption = document.querySelector('input[name="answer"]:checked');
+            if (selectedOption) {
+                const answer = selectedOption.value;
+                const isCorrect = answer === currentQuestion.romaji;
+                document.getElementById("result").innerText = isCorrect ? "Correct!" : `Wrong! The correct answer was '${currentQuestion.romaji}'.`;
+                setTimeout(loadQuestion, 2000);
+            } else {
+                document.getElementById("result").innerText = "Please select an answer!";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadQuestion);
+    </script>
+</body>
+</html>

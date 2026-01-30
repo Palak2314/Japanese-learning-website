@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ocean Hiragana Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+:root {
+    --ocean-deep: #0B4D6A;
+    --ocean-medium: #1E6091;
+    --ocean-light: #2E86AB;
+    --turquoise-dark: #00A896;
+    --turquoise-bright: #02C39A;
+    --turquoise-light: #7FEFFF;
+    --seafoam: #B8F2FF;
+    --pearl-white: #F8FDFF;
+    --gold: #FFD700;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, var(--ocean-deep) 0%, var(--ocean-medium) 50%, var(--turquoise-dark) 100%);
+    background-attachment: fixed;
+    color: var(--pearl-white);
+    font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.game-title {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: var(--turquoise-bright);
+    margin-bottom: 10px;
+}
+
+.game-subtitle {
+    font-size: 1.2em;
+    color: var(--seafoam);
+}
+
+/* Controls */
+.controls-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.button-container {
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--turquoise-dark), var(--turquoise-bright));
+    color: var(--pearl-white);
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(0, 168, 150, 0.4);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 168, 150, 0.6);
+}
+
+#pauseBtn {
+    background: linear-gradient(135deg, #FF6B9D, #FF8B9D);
+}
+
+#restartBtn {
+    background: linear-gradient(135deg, var(--gold), #FFA500);
+    color: var(--ocean-deep);
+}
+
+/* Main game layout */
+.game-main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+canvas {
+    background: radial-gradient(circle at center, #001122 0%, #000511 100%);
+    border: 4px solid var(--turquoise-bright);
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(2, 195, 154, 0.5);
+}
+
+/* Input section */
+.input-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 600px;
+    background: rgba(11, 77, 106, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 2px solid rgba(127, 239, 255, 0.3);
+    padding: 30px;
+    min-width: 300px;
+}
+
+#score {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--gold);
+    background: rgba(11, 77, 106, 0.8);
+    padding: 15px 30px;
+    border-radius: 15px;
+    border: 3px solid var(--gold);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    text-shadow: 0 0 10px var(--gold);
+    margin-bottom: 25px;
+}
+
+.input-label {
+    color: var(--turquoise-bright);
+    font-size: 1.3em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#inputBox {
+    font-size: 1.2em;
+    padding: 15px 25px;
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+    border: 2px solid var(--turquoise-bright);
+    border-radius: 15px;
+    outline: none;
+    background: rgba(30, 96, 145, 0.8);
+    color: var(--pearl-white);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#inputBox:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(127, 239, 255, 0.4);
+    background: rgba(46, 134, 171, 0.9);
+}
+
+#inputBox::placeholder {
+    color: rgba(248, 253, 255, 0.6);
+}
+
+.input-help {
+    color: var(--seafoam);
+    font-size: 0.9em;
+    margin-top: 15px;
+    text-align: center;
+    opacity: 0.8;
+}
+
+/* Score section - removed */
+
+/* Responsive */
+@media (max-width: 768px) {
+    .game-main {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+    
+    .input-section {
+        min-height: auto;
+        padding: 25px;
+        min-width: 280px;
+    }
+    
+    canvas {
+        width: 350px !important;
+        height: 525px !important;
+    }
+    
+    .game-title {
+        font-size: 2em;
+    }
+    
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 1.6em;
+    }
+    
+    canvas {
+        width: 300px !important;
+        height: 450px !important;
+    }
+    
+    .button-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    #inputBox {
+        width: 250px;
+    }
+}
+
+/* Popup styles */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(11, 77, 106, 0.9);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: linear-gradient(135deg, rgba(11, 77, 106, 0.95), rgba(30, 96, 145, 0.9));
+    backdrop-filter: blur(20px);
+    padding: 40px;
+    border-radius: 20px;
+    border: 3px solid var(--turquoise-bright);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+}
+
+.popup-title {
+    font-size: 2em;
+    color: var(--turquoise-bright);
+    margin-bottom: 20px;
+}
+
+.popup-instructions {
+    color: var(--seafoam);
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.popup-close-btn {
+    background: linear-gradient(135deg, var(--turquoise-dark), var(--turquoise-bright));
+    color: var(--pearl-white);
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: 600;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.popup-close-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 168, 150, 0.6);
+}
+
+.popup-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+</style>
+</head>
+<body>
+
+<!-- How to Play Popup -->
+<div class="popup-overlay" id="howToPlayPopup">
+    <div class="popup-content">
+        <h2 class="popup-title">How to Play</h2>
+        <div class="popup-instructions">
+            <p><strong>Goal:</strong> Type the romaji (English pronunciation) of falling hiragana characters</p>
+            <p><strong>Controls:</strong> Type answer and press Enter</p>
+            <p><strong>Scoring:</strong> +10 points for correct, -5 for missed</p>
+            <p>Ready to start learning Japanese?</p>
+        </div>
+        <button class="popup-close-btn" onclick="closeHowToPlay()">
+            <i class="fas fa-play"></i> Start Playing!
+        </button>
+    </div>
+</div>
+
+<div class="game-header">
+    <h1 class="game-title">
+        <i class="fas fa-water"></i> OCEAN HIRAGANA ADVENTURE
+    </h1>
+    <p class="game-subtitle">Master Japanese characters</p>
+</div>
+
+<div class="controls-section">
+    <div class="button-container">
+        <button id="playBtn"><i class="fas fa-play"></i> Play</button>
+        <button id="pauseBtn"><i class="fas fa-pause"></i> Pause</button>
+        <button id="restartBtn"><i class="fas fa-redo"></i> Restart</button>
+    </div>
+</div>
+
+<div class="game-main">
+    <div class="game-area">
+        <canvas id="gameCanvas" width="400" height="600"></canvas>
+    </div>
+    
+    <div class="input-section">
+        <div id="score">Score: 0</div>
+        <div class="input-label">
+            <i class="fas fa-keyboard"></i> Type Romaji Here
+        </div>
+        <input type="text" id="inputBox" placeholder="e.g., ka, shi, tsu..." autofocus>
+        <div class="input-help">
+            Watch the falling characters and type their pronunciation!
+        </div>
+    </div>
+</div>
+
+<script>
+// Popup functionality
+function closeHowToPlay() {
+    const popup = document.getElementById('howToPlayPopup');
+    popup.classList.add('hidden');
+    setTimeout(() => {
+        popup.style.display = 'none';
+    }, 300);
+}
+
+// Original game logic
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const inputBox = document.getElementById('inputBox');
+const playBtn = document.getElementById('playBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const restartBtn = document.getElementById('restartBtn');
+
+const hiraganaList = [
+  { kana: 'あ', romaji: 'a' }, { kana: 'い', romaji: 'i' }, { kana: 'う', romaji: 'u' },
+  { kana: 'え', romaji: 'e' }, { kana: 'お', romaji: 'o' },
+  { kana: 'か', romaji: 'ka' }, { kana: 'き', romaji: 'ki' }, { kana: 'く', romaji: 'ku' },
+  { kana: 'け', romaji: 'ke' }, { kana: 'こ', romaji: 'ko' },
+  { kana: 'さ', romaji: 'sa' }, { kana: 'し', romaji: 'shi' }, { kana: 'す', romaji: 'su' },
+  { kana: 'せ', romaji: 'se' }, { kana: 'そ', romaji: 'so' },
+  { kana: 'た', romaji: 'ta' }, { kana: 'ち', romaji: 'chi' }, { kana: 'つ', romaji: 'tsu' },
+  { kana: 'て', romaji: 'te' }, { kana: 'と', romaji: 'to' },
+  { kana: 'な', romaji: 'na' }, { kana: 'に', romaji: 'ni' }, { kana: 'ぬ', romaji: 'nu' },
+  { kana: 'ね', romaji: 'ne' }, { kana: 'の', romaji: 'no' },
+  { kana: 'は', romaji: 'ha' }, { kana: 'ひ', romaji: 'hi' }, { kana: 'ふ', romaji: 'fu' },
+  { kana: 'へ', romaji: 'he' }, { kana: 'ほ', romaji: 'ho' },
+  { kana: 'ま', romaji: 'ma' }, { kana: 'み', romaji: 'mi' }, { kana: 'む', romaji: 'mu' },
+  { kana: 'め', romaji: 'me' }, { kana: 'も', romaji: 'mo' },
+  { kana: 'や', romaji: 'ya' }, { kana: 'ゆ', romaji: 'yu' }, { kana: 'よ', romaji: 'yo' },
+  { kana: 'ら', romaji: 'ra' }, { kana: 'り', romaji: 'ri' }, { kana: 'る', romaji: 'ru' },
+  { kana: 'れ', romaji: 're' }, { kana: 'ろ', romaji: 'ro' },
+  { kana: 'わ', romaji: 'wa' }, { kana: 'を', romaji: 'wo' }, { kana: 'ん', romaji: 'n' },
+  { kana: 'が', romaji: 'ga' }, { kana: 'ぎ', romaji: 'gi' }, { kana: 'ぐ', romaji: 'gu' },
+  { kana: 'げ', romaji: 'ge' }, { kana: 'ご', romaji: 'go' },
+  { kana: 'ざ', romaji: 'za' }, { kana: 'じ', romaji: 'ji' }, { kana: 'ず', romaji: 'zu' },
+  { kana: 'ぜ', romaji: 'ze' }, { kana: 'ぞ', romaji: 'zo' },
+  { kana: 'だ', romaji: 'da' }, { kana: 'ぢ', romaji: 'ji' }, { kana: 'づ', romaji: 'zu' },
+  { kana: 'で', romaji: 'de' }, { kana: 'ど', romaji: 'do' },
+  { kana: 'ば', romaji: 'ba' }, { kana: 'び', romaji: 'bi' }, { kana: 'ぶ', romaji: 'bu' },
+  { kana: 'べ', romaji: 'be' }, { kana: 'ぼ', romaji: 'bo' },
+  { kana: 'ぱ', romaji: 'pa' }, { kana: 'ぴ', romaji: 'pi' }, { kana: 'ぷ', romaji: 'pu' },
+  { kana: 'ぺ', romaji: 'pe' }, { kana: 'ぽ', romaji: 'po' },
+  { kana: 'きゃ', romaji: 'kya' }, { kana: 'きゅ', romaji: 'kyu' }, { kana: 'きょ', romaji: 'kyo' },
+  { kana: 'しゃ', romaji: 'sha' }, { kana: 'しゅ', romaji: 'shu' }, { kana: 'しょ', romaji: 'sho' },
+  { kana: 'ちゃ', romaji: 'cha' }, { kana: 'ちゅ', romaji: 'chu' }, { kana: 'ちょ', romaji: 'cho' },
+  { kana: 'にゃ', romaji: 'nya' }, { kana: 'にゅ', romaji: 'nyu' }, { kana: 'にょ', romaji: 'nyo' },
+  { kana: 'ひゃ', romaji: 'hya' }, { kana: 'ひゅ', romaji: 'hyu' }, { kana: 'ひょ', romaji: 'hyo' },
+  { kana: 'みゃ', romaji: 'mya' }, { kana: 'みゅ', romaji: 'myu' }, { kana: 'みょ', romaji: 'myo' },
+  { kana: 'りゃ', romaji: 'rya' }, { kana: 'りゅ', romaji: 'ryu' }, { kana: 'りょ', romaji: 'ryo' }
+];
+
+let fallingKana = [];
+let score = 0;
+let isPaused = true;
+let spawnInterval;
+let animationId;
+
+class Kana {
+    constructor(kanaObj) {
+        this.kana = kanaObj.kana;
+        this.romaji = kanaObj.romaji;
+        this.x = Math.random() * (canvas.width - 40);
+        this.y = 0;
+        this.speed = 1 + Math.random() * 2;
+        this.color = `hsl(${Math.random()*360}, 100%, 70%)`;
+    }
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.font = '40px Noto Sans JP';
+        ctx.shadowColor = '#7FEFFF';
+        ctx.shadowBlur = 15;
+        ctx.fillText(this.kana, this.x, this.y);
+        ctx.shadowBlur = 0;
+    }
+    update() {
+        this.y += this.speed;
+    }
+}
+
+function spawnKana() {
+    const randomKana = hiraganaList[Math.floor(Math.random() * hiraganaList.length)];
+    fallingKana.push(new Kana(randomKana));
+}
+
+function gameLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < fallingKana.length; i++) {
+        fallingKana[i].update();
+        fallingKana[i].draw();
+        if (fallingKana[i].y > canvas.height) {
+            fallingKana.splice(i, 1);
+            score -= 5;
+            document.getElementById('score').innerText = "Score: " + score;
+            i--;
+        }
+    }
+    if (!isPaused) animationId = requestAnimationFrame(gameLoop);
+}
+
+inputBox.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        const typedInput = inputBox.value.toLowerCase();
+        for (let i = 0; i < fallingKana.length; i++) {
+            if (typedInput === fallingKana[i].romaji) {
+                fallingKana.splice(i, 1);
+                score += 10;
+                document.getElementById('score').innerText = "Score: " + score;
+                break;
+            }
+        }
+        inputBox.value = '';
+    }
+});
+
+playBtn.addEventListener('click', () => {
+    if (isPaused) {
+        isPaused = false;
+        spawnInterval = setInterval(spawnKana, 1200);
+        gameLoop();
+    }
+});
+
+pauseBtn.addEventListener('click', () => {
+    isPaused = true;
+    clearInterval(spawnInterval);
+    cancelAnimationFrame(animationId);
+});
+
+restartBtn.addEventListener('click', () => {
+    fallingKana = [];
+    score = 0;
+    document.getElementById('score').innerText = "Score: " + score;
+    isPaused = false;
+    clearInterval(spawnInterval);
+    cancelAnimationFrame(animationId);
+    spawnInterval = setInterval(spawnKana, 1200);
+    gameLoop();
+});
+</script>
+
+</body>
+</html>

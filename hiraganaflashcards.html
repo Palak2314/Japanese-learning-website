@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiragana Flashcards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS for styling flashcards */
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            background: url('https://www.transparenttextures.com/patterns/paper.png') repeat;
+        }
+        h1 {
+            margin-top: 20px;
+            color: #8B0000; /* Dark red */
+            text-shadow: 1px 1px 2px #fff;
+        }
+        .section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+            padding: 20px;
+            border: 2px solid #8B0000; /* Dark red */
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .flashcard-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .flashcard {
+            width: 80px;
+            height: 120px;
+            perspective: 1000px;
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flashcard:hover .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px; /* Increased font size for better visibility */
+            color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .flashcard-front {
+            background-color: #4CAF50; /* Green for front */
+        }
+        .flashcard-back {
+            background-color: #FF5722; /* Orange for back */
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Hiragana Flashcards</h1>
+    <section class="section">
+        <div id="hiragana-flashcard-container" class="flashcard-container">
+            <!-- Hiragana Flashcards -->
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">あ</div><div class="flashcard-back">a</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">い</div><div class="flashcard-back">i</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">う</div><div class="flashcard-back">u</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">え</div><div class="flashcard-back">e</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">お</div><div class="flashcard-back">o</div></div></div>
+
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">か</div><div class="flashcard-back">ka</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">き</div><div class="flashcard-back">ki</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">く</div><div class="flashcard-back">ku</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">け</div><div class="flashcard-back">ke</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">こ</div><div class="flashcard-back">ko</div></div></div>
+
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">さ</div><div class="flashcard-back">sa</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">し</div><div class="flashcard-back">shi</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">す</div><div class="flashcard-back">su</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">せ</div><div class="flashcard-back">se</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">そ</div><div class="flashcard-back">so</div></div></div>
+
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">た</div><div class="flashcard-back">ta</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">ち</div><div class="flashcard-back">chi</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">つ</div><div class="flashcard-back">tsu</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">て</div><div class="flashcard-back">te</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">と</div><div class="flashcard-back">to</div></div></div>
+
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">な</div><div class="flashcard-back">na</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">に</div><div class="flashcard-back">ni</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">ぬ</div><div class="flashcard-back">nu</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">ね</div><div class="flashcard-back">ne</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">の</div><div class="flashcard-back">no</div></div></div>
+
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">は</div><div class="flashcard-back">ha</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">ひ</div><div class="flashcard-back">hi</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">ふ</div><div class="flashcard-back">fu</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">へ</div><div class="flashcard-back">he</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">ほ</div><div class="flashcard-back">ho</div></div></div>
+
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">ま</div><div class="flashcard-back">ma</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">み</div><div class="flashcard-back">mi</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">む</div><div class="flashcard-back">mu</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">め</div><div class="flashcard-back">me</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">も</div><div class="flashcard-back">mo</div></div></div>
+
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">や</div><div class="flashcard-back">ya</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">ゆ</div><div class="flashcard-back">yu</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">よ</div><div class="flashcard-back">yo</div></div></div>
+
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">ら</div><div class="flashcard-back">ra</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">り</div><div class="flashcard-back">ri</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">る</div><div class="flashcard-back">ru</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">れ</div><div class="flashcard-back">re</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">ろ</div><div class="flashcard-back">ro</div></div></div>
+
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">わ</div><div class="flashcard-back">wa</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">を</div><div class="flashcard-back">wo</div></div></div>
+            <div class="flashcard"><div class="flashcard-inner"><div class="flashcard-front">ん</div><div class="flashcard-back">n</div></div></div>
+        </div>
+    </section>
+
+    <script>
+        // JavaScript to shuffle flashcards
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('hiragana-flashcard-container');
+            const flashcards = Array.from(container.children);
+
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            shuffle(flashcards);
+            flashcards.forEach(card => container.appendChild(card)); // Reorder cards in the DOM
+        });
+    </script>
+</body>
+</html>

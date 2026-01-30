@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N5 Sentence Patterns</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            background: url('https://www.transparenttextures.com/patterns/paper.png') repeat;
+        }
+        h1 {
+            margin-top: 20px;
+            color: #8B0000;
+            text-shadow: 1px 1px 2px #fff;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            margin-right: 5px;
+            border-radius: 5px;
+        }
+        .tab.active {
+            background-color: #8B0000;
+        }
+        .content {
+            display: none;
+            border: 2px solid #8B0000;
+            border-radius: 15px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .content.active {
+            display: block;
+        }
+        .sentence-patterns {
+            margin-top: 20px;
+        }
+        .sentence-pattern {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        .delete-btn {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #FF5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .delete-btn:hover {
+            background-color: #8B0000;
+        }
+        .add-pattern {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .add-pattern textarea {
+            width: 100%;
+            max-width: 500px;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+        .add-pattern button {
+            width: 120px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .add-pattern button:hover {
+            background-color: #8B0000;
+        }
+    </style>
+    <script>
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.content');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function addPattern() {
+            const newPattern = document.getElementById('new-pattern').value;
+            if (newPattern.trim() !== '') {
+                const patternList = document.getElementById('pattern-list');
+                const newPatternItem = document.createElement('div');
+                newPatternItem.classList.add('sentence-pattern');
+
+                // Create text node for the pattern
+                const patternText = document.createElement('span');
+                patternText.textContent = newPattern;
+
+                // Create delete button for the pattern
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.onclick = () => newPatternItem.remove();
+
+                // Append text and delete button to pattern item
+                newPatternItem.appendChild(patternText);
+                newPatternItem.appendChild(deleteBtn);
+
+                // Append the pattern item to the list
+                patternList.appendChild(newPatternItem);
+                document.getElementById('new-pattern').value = '';
+            } else {
+                alert("Please enter a valid sentence pattern.");
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <h1>JLPT N5 Sentence Patterns</h1>
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('sentence-patterns')">View Patterns</div>
+        <div class="tab" onclick="showTab('add-pattern')">Add New Pattern</div>
+    </div>
+
+    <!-- View Patterns Tab -->
+    <div id="sentence-patterns" class="content active">
+        <h2>Common Sentence Patterns - Chapter 1</h2>
+        <div id="pattern-list" class="sentence-patterns">
+            <div class="sentence-pattern">
+                <span>～は～です (A is B) — 私は学生です。 (I am a student.)</span>
+                <button class="delete-btn" onclick="this.parentElement.remove()">Delete</button>
+            </div>
+            <div class="sentence-pattern">
+                <span>～は～ではありません (A is not B) — 彼は医者ではありません。 (He is not a doctor.)</span>
+                <button class="delete-btn" onclick="this.parentElement.remove()">Delete</button>
+            </div>
+            <div class="sentence-pattern">
+                <span>～ですか？ (Is it...?) — あなたは先生ですか？ (Are you a teacher?)</span>
+                <button class="delete-btn" onclick="this.parentElement.remove()">Delete</button>
+            </div>
+            <div class="sentence-pattern">
+                <span>～も～です (A is also B) — 私も会社員です。 (I am also an employee.)</span>
+                <button class="delete-btn" onclick="this.parentElement.remove()">Delete</button>
+            </div>
+            <div class="sentence-pattern">
+                <span>～の～ (Possessive) — これは私の本です。 (This is my book.)</span>
+                <button class="delete-btn" onclick="this.parentElement.remove()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add New Pattern Tab -->
+    <div id="add-pattern" class="content">
+        <h2>Add New Sentence Pattern</h2>
+        <div class="add-pattern">
+            <textarea id="new-pattern" rows="4" placeholder="Type your sentence pattern here..."></textarea>
+            <button onclick="addPattern()">Add Sentence Pattern</button>
+        </div>
+    </div>
+
+</body>
+</html>

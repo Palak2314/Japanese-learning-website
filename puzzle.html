@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>Kana Crafter - 面白い日本語</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Google Web Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+<!-- Icon Font Stylesheet -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+  :root {
+    --primary: #06BBCC;
+    --light: #F0FBFC;
+    --dark: #181d38;
+    --secondary: #FFC107;
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, var(--light), #ffffff);
+    min-height: 100vh;
+    color: var(--dark);
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .game-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 40px 20px;
+    background: linear-gradient(rgba(24, 29, 56, .85), rgba(24, 29, 56, .85)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect width="1200" height="600" fill="%2306BBCC"/><path d="M0,200 Q300,150 600,200 T1200,200 V600 H0 Z" fill="%23F0FBFC" opacity="0.3"/></svg>');
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    color: white;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+
+  .game-header h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: white;
+  }
+
+  .game-header .subtitle {
+    font-size: 1.2rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .game-header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .game-container {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+
+  .game-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .level-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .level-selector label {
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  #level-select {
+    font-size: 1rem;
+    padding: 10px 15px;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    background: white;
+    color: var(--dark);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+  }
+
+  #points {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--light);
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 2px solid var(--primary);
+  }
+
+  #letter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+    max-width: 100%;
+    justify-content: center;
+    user-select: none;
+    padding: 20px;
+    background: var(--light);
+    border-radius: 15px;
+    border: 2px solid var(--primary);
+  }
+
+  .letter-cell {
+    background: linear-gradient(145deg, var(--primary), #05a3b3);
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    padding: 15px 0;
+    text-align: center;
+    border-radius: 12px;
+    cursor: grab;
+    box-shadow: 0 4px 15px rgba(6, 187, 204, 0.3);
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .letter-cell.locked {
+    opacity: 0.3;
+    pointer-events: none;
+    box-shadow: none;
+    cursor: default;
+    background: #cccccc;
+  }
+
+  .letter-cell.dragging {
+    opacity: 0.7;
+    cursor: grabbing;
+    transform: rotate(5deg) scale(1.05);
+  }
+
+  .letter-cell:hover:not(.locked) {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(6, 187, 204, 0.4);
+    border-color: var(--secondary);
+  }
+
+  #word-builder {
+    min-height: 80px;
+    background: linear-gradient(145deg, #fff9e6, #fffbf0);
+    padding: 20px;
+    border: 3px dashed var(--secondary);
+    border-radius: 15px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+  }
+
+  #word-builder::before {
+    content: "Drag characters here to build words";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #999;
+    font-style: italic;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  #word-builder:not(:empty)::before {
+    display: none;
+  }
+
+  .word-letter {
+    background: linear-gradient(145deg, var(--secondary), #e6ac00);
+    color: var(--dark);
+    padding: 12px 16px;
+    font-size: 28px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: grab;
+    box-shadow: 0 3px 10px rgba(255, 193, 7, 0.3);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .word-letter.dragging {
+    opacity: 0.7;
+    cursor: grabbing;
+    transform: rotate(-3deg) scale(1.05);
+  }
+
+  .word-letter:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+    border-color: var(--primary);
+  }
+
+  .buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn:hover::before {
+    left: 100%;
+  }
+
+  .btn-primary {
+    background: linear-gradient(145deg, var(--success), #218838);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+  }
+
+  .btn-secondary {
+    background: linear-gradient(145deg, var(--warning), #e0a800);
+    color: var(--dark);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+  }
+
+  #result {
+    font-size: 1.2rem;
+    text-align: center;
+    color: var(--dark);
+    margin-bottom: 20px;
+    white-space: pre-line;
+    min-height: 80px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-left: 5px solid var(--primary);
+  }
+
+  .result-success {
+    border-left-color: var(--success) !important;
+    background: linear-gradient(145deg, #f8fff8, #ffffff) !important;
+    color: var(--success) !important;
+  }
+
+  .result-error {
+    border-left-color: var(--danger) !important;
+    background: linear-gradient(145deg, #fff8f8, #ffffff) !important;
+    color: var(--danger) !important;
+  }
+
+  .result-hint {
+    border-left-color: var(--warning) !important;
+    background: linear-gradient(145deg, #fffef8, #ffffff) !important;
+    color: var(--dark) !important;
+  }
+
+  #confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    animation: fall 3s linear forwards;
+    opacity: 1;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(100vh) rotateZ(360deg);
+      opacity: 0;
+    }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .game-header h1 {
+      font-size: 2rem;
+    }
+    
+    .game-container {
+      padding: 20px;
+    }
+    
+    .game-controls {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    #letter-grid {
+      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+      gap: 10px;
+      padding: 15px;
+    }
+    
+    .letter-cell {
+      font-size: 24px;
+      min-height: 60px;
+      padding: 12px 0;
+    }
+    
+    .word-letter {
+      font-size: 24px;
+      padding: 10px 14px;
+      min-height: 50px;
+    }
+    
+    .btn {
+      padding: 12px 25px;
+      font-size: 1rem;
+    }
+  }
+
+  /* Accessibility improvements */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Game completion animation */
+  @keyframes celebration {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  .celebration {
+    animation: celebration 0.6s ease-in-out;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="game-header">
+    <h1><i class="fas fa-hammer"></i> Kana Crafter</h1>
+    <div class="subtitle">かな クラフター</div>
+    <p>Build Japanese words by dragging hiragana and katakana characters into the word builder!</p>
+  </div>
+
+  <div class="game-container">
+    <div class="game-controls">
+      <div class="level-selector">
+        <label for="level-select"><i class="fas fa-layer-group"></i> Difficulty:</label>
+        <select id="level-select" aria-label="Select difficulty level">
+          <option value="easy">Easy (初級)</option>
+          <option value="medium">Medium (中級)</option>
+          <option value="hard">Hard (上級)</option>
+        </select>
+      </div>
+      <div id="points" aria-live="polite">
+        <i class="fas fa-star"></i> Points: 0 / 5
+      </div>
+    </div>
+
+    <div id="letter-grid" aria-label="Available letters" role="region"></div>
+    
+    <div id="word-builder" aria-label="Word builder area" tabindex="0" role="region"></div>
+
+    <div class="buttons-container">
+      <button id="check-btn" class="btn btn-primary" disabled>
+        <i class="fas fa-check-circle"></i> Check Word
+      </button>
+      <button id="hint-btn" class="btn btn-secondary">
+        <i class="fas fa-lightbulb"></i> Hint (2 left)
+      </button>
+    </div>
+
+    <div id="result" role="alert" aria-live="polite"></div>
+  </div>
+</div>
+
+<div id="confetti"></div>
+
+<script>
+  const data = {
+    easy: {
+      letters: ['は', 'が', 'を', 'こ', 'れ', 'そ', 'れ', 'あ', 'れ', 'た', 'べ', 'る', 'い', 'く', 'パ', 'ン', 'サ', 'ッ', 'カ', 'ー', 'あ', 'た', 'ら', 'し', 'い', 'ふ', 'る', 'い'],
+      words: {
+        'は': 'Topic particle.',
+        'が': 'Subject particle.',
+        'を': 'Object particle.',
+        'これ': 'This (near speaker).',
+        'それ': 'That (near listener).',
+        'あれ': 'That (far from both).',
+        'たべる': 'To eat.',
+        'いく': 'To go.',
+        'パン': 'Bread (katakana).',
+        'サッカー': 'Soccer (katakana).',
+        'あたらしい': 'New.',
+        'ふるい': 'Old.'
+      }
+    },
+    medium: {
+      letters: ['ま', 'た', 'ね', 'べ', 'ん', 'き', 'ょ', 'う', 'あ', 'さ', 'ひ', 'る', 'い', 'き', 'の', 'う', 'し', 'ご', 'と', 'う', 'せ', 'ん', 'せ', 'い', 'で', 'す', 'こ', 'れ'],
+      words: {
+        'またね': 'See you later.',
+        'べんきょう': 'Study.',
+        'あさ': 'Morning.',
+        'ひる': 'Afternoon.',
+        'きのう': 'Yesterday.',
+        'しごと': 'Work.',
+        'せんせい': 'Teacher.',
+        'です': 'To be (polite).',
+        'これ': 'This.'
+      }
+    },
+    hard: {
+      letters: ['せ', 'ん', 'た', 'く', 'き', 'ゅ', 'う', 'で', 'ん', 'わ', 'と', 'も', 'だ', 'ち', 'が', 'み', 'せ', 'ん', 'せ', 'い', 'に', 'は', 'な', 'す', 'う', 'る', 'べ', 'き', 'だ'],
+      words: {
+        'せんたく': 'Laundry.',
+        'きゅうでん': 'Kyuden (Imperial Palace).',
+        'ともだち': 'Friend.',
+        'が': 'Subject particle.',
+        'みせんせい': 'Shop teacher (example).',
+        'はなす': 'To talk.',
+        'する': 'To do.',
+        'べき': 'Should / must.',
+        'だ': 'Is (casual).'
+      }
+    }
+  };
+
+  const maxPoints = 5;
+  let currentLevel = 'easy';
+  let currentPoints = 0;
+  let failedAttempts = 0;
+  let lockedIndices = new Set();
+  let hintUses = 0;
+  const maxHints = 2;
+  let foundWordsSet = new Set();
+
+  const letterGrid = document.getElementById('letter-grid');
+  const wordBuilder = document.getElementById('word-builder');
+  const checkBtn = document.getElementById('check-btn');
+  const hintBtn = document.getElementById('hint-btn');
+  const result = document.getElementById('result');
+  const levelSelect = document.getElementById('level-select');
+  const pointsDisplay = document.getElementById('points');
+  const confettiContainer = document.getElementById('confetti');
+
+  let letterObjects = [];
+  let builderLetters = [];
+
+  let draggedElement = null;
+  let dragSource = null;
+
+  function shuffle(arr) {
+    return arr.map(v => [Math.random(), v])
+      .sort((a,b) => a[0] - b[0])
+      .map(v => v[1]);
+  }
+
+  function renderGrid() {
+    letterGrid.innerHTML = '';
+    letterObjects.forEach((obj, i) => {
+      const cell = document.createElement('div');
+      cell.className = 'letter-cell';
+      if(obj.locked) cell.classList.add('locked');
+      cell.textContent = obj.letter;
+      cell.draggable = !obj.locked;
+      cell.dataset.index = i;
+
+      cell.addEventListener('dragstart', (e) => {
+        if(obj.locked) return;
+        draggedElement = cell;
+        dragSource = 'grid';
+        cell.classList.add('dragging');
+        e.dataTransfer.setData('text/plain', i);
+        e.dataTransfer.effectAllowed = 'move';
+      });
+
+      cell.addEventListener('dragend', () => {
+        cell.classList.remove('dragging');
+      });
+
+      letterGrid.appendChild(cell);
+    });
+  }
+
+  function renderBuilder() {
+    wordBuilder.innerHTML = '';
+    builderLetters.forEach((obj) => {
+      const letterDiv = document.createElement('div');
+      letterDiv.className = 'word-letter';
+      letterDiv.textContent = obj.letter;
+      letterDiv.draggable = true;
+      letterDiv.dataset.index = obj.index;
+
+      letterDiv.addEventListener('dragstart', (e) => {
+        draggedElement = letterDiv;
+        dragSource = 'builder';
+        letterDiv.classList.add('dragging');
+        e.dataTransfer.setData('text/plain', obj.index);
+        e.dataTransfer.effectAllowed = 'move';
+      });
+
+      letterDiv.addEventListener('dragend', () => {
+        letterDiv.classList.remove('dragging');
+      });
+
+      wordBuilder.appendChild(letterDiv);
+    });
+  }
+
+  wordBuilder.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  });
+
+  wordBuilder.addEventListener('drop', (e) => {
+    e.preventDefault();
+    if(dragSource === 'grid'){
+      const index = Number(e.dataTransfer.getData('text/plain'));
+      if(lockedIndices.has(index)) return;
+      builderLetters.push(letterObjects[index]);
+      renderBuilder();
+      checkBtn.disabled = false;
+    }
+  });
+
+  letterGrid.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  });
+
+  letterGrid.addEventListener('drop', (e) => {
+    e.preventDefault();
+    if(dragSource === 'builder'){
+      const index = Number(e.dataTransfer.getData('text/plain'));
+      builderLetters = builderLetters.filter(l => l.index !== index);
+      renderBuilder();
+      if(builderLetters.length === 0) checkBtn.disabled = true;
+    }
+  });
+
+  function showHint(){
+    if(hintUses >= maxHints){
+      hintBtn.disabled = true;
+      return;
+    }
+    const allWords = Object.entries(data[currentLevel].words);
+    const notFoundWords = allWords.filter(([w]) => !foundWordsSet.has(w));
+    if(notFoundWords.length === 0){
+      result.textContent = "🎉 All words found! No more hints available.";
+      result.className = 'result-hint';
+      hintBtn.disabled = true;
+      return;
+    }
+    const [word, meaning] = notFoundWords[Math.floor(Math.random() * notFoundWords.length)];
+    result.textContent = `💡 Hint: ${meaning}`;
+    result.className = 'result-hint';
+    hintUses++;
+    hintBtn.innerHTML = `<i class="fas fa-lightbulb"></i> Hint (${maxHints - hintUses} left)`;
+    if(hintUses >= maxHints) hintBtn.disabled = true;
+  }
+
+  hintBtn.addEventListener('click', showHint);
+
+  checkBtn.addEventListener('click', () => {
+    if(builderLetters.length === 0) return;
+
+    const word = builderLetters.map(l => l.letter).join('');
+    const validWords = data[currentLevel].words;
+
+    if(validWords[word]){
+      result.textContent = `✅ ${word}: ${validWords[word]}`;
+      result.className = 'result-success';
+      currentPoints++;
+      failedAttempts = 0;
+
+      builderLetters.forEach(l => {
+        letterObjects[l.index].locked = true;
+        lockedIndices.add(l.index);
+      });
+
+      foundWordsSet.add(word);
+      builderLetters = [];
+      checkBtn.disabled = true;
+      updatePoints();
+      renderGrid();
+      renderBuilder();
+
+      // Add celebration animation
+      pointsDisplay.classList.add('celebration');
+      setTimeout(() => pointsDisplay.classList.remove('celebration'), 600);
+
+      if(currentPoints >= maxPoints){
+        result.textContent += '\n🎉 Level Complete! You earned all points!';
+        result.className = 'result-success';
+        launchConfetti();
+        hintBtn.disabled = true;
+      }
+    } else {
+      failedAttempts++;
+      result.textContent = `❌ "${word}" is not a valid word. Try again. Attempt ${failedAttempts} / 3`;
+      result.className = 'result-error';
+      builderLetters = [];
+      checkBtn.disabled = true;
+      renderBuilder();
+
+      if(failedAttempts >= 3){
+        result.textContent += `\nToo many failed attempts. Restarting level...`;
+        setTimeout(() => resetGame(), 2000);
+      }
+    }
+  });
+
+  function updatePoints(){
+    pointsDisplay.innerHTML = `<i class="fas fa-star"></i> Points: ${currentPoints} / ${maxPoints}`;
+  }
+
+  function resetGame(){
+    currentPoints = 0;
+    failedAttempts = 0;
+    lockedIndices.clear();
+    hintUses = 0;
+    hintBtn.disabled = false;
+    hintBtn.innerHTML = `<i class="fas fa-lightbulb"></i> Hint (${maxHints} left)`;
+    foundWordsSet.clear();
+    loadLevel(currentLevel);
+    updatePoints();
+    result.textContent = '';
+    result.className = '';
+  }
+
+  function loadLevel(level) {
+    currentLevel = level;
+    currentPoints = 0;
+    failedAttempts = 0;
+    lockedIndices.clear();
+    hintUses = 0;
+    hintBtn.disabled = false;
+    hintBtn.innerHTML = `<i class="fas fa-lightbulb"></i> Hint (${maxHints} left)`;
+    foundWordsSet.clear();
+
+    const letters = data[level].letters;
+    letterObjects = letters.map((letter, i) => ({letter, locked: false, index: i}));
+    builderLetters = [];
+    checkBtn.disabled = true;
+    result.textContent = '';
+    result.className = '';
+    updatePoints();
+    renderGrid();
+    renderBuilder();
+  }
+
+  levelSelect.addEventListener('change', (e) => {
+    loadLevel(e.target.value);
+  });
+
+  function launchConfetti(){
+    const colors = ['#06BBCC', '#FFC107', '#28a745', '#dc3545', '#6f42c1', '#fd7e14'];
+    for(let i=0; i<150; i++){
+      const confetti = document.createElement('div');
+      confetti.classList.add('confetti-piece');
+      confetti.style.left = Math.random() * window.innerWidth + 'px';
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = (Math.random()*2) + 's';
+      confetti.style.transform = `rotate(${Math.random()*360}deg)`;
+      confettiContainer.appendChild(confetti);
+      setTimeout(() => {
+        confetti.remove();
+      }, 3000);
+    }
+  }
+
+  // Initial load
+  loadLevel(currentLevel);
+  updatePoints();
+
+  // Add keyboard accessibility
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && !checkBtn.disabled) {
+      checkBtn.click();
+    }
+    if(e.key === 'h' || e.key === 'H') {
+      if(!hintBtn.disabled) hintBtn.click();
+    }
+  });
+</script>
+</body>
+</html>

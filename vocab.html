@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLPT N5 Vocabulary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Nunito:wght@600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #f4f4f4;
+            line-height: 1.6;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+        }
+
+        .word-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .word-card {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transform: scale(1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .word-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .word-card h3 {
+            color: #3498db;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
+
+        .word-card p {
+            color: #ddd;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .word-card .example {
+            color: #bbb;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .search-bar input {
+            width: 50%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 2px solid #3498db;
+            background-color: #1e1e1e;
+            color: #fff;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .search-bar input::placeholder {
+            color: #3498db;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #bbb;
+            font-size: 1rem;
+        }
+
+        .footer a {
+            color: #3498db;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<h1>JLPT N5 Vocabulary List</h1>
+
+<!-- Search Bar -->
+<div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search for words...">
+</div>
+
+<!-- Word List -->
+<div class="word-container" id="wordContainer">
+    <!-- Word cards will be injected here by JavaScript -->
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 面白い日本語, All Rights Revieved | <a href="index.html">Home</a></p>
+</footer>
+
+<script>
+    // Array of 100 JLPT N5 words (example data)
+    const words = [
+       
+    
+    { "word": "いい", "pronunciation": "いい (ii)", "meaning": "Good", "example": "このペンはいいです。 (このぺんはいいです) – This pen is good." },
+    { "word": "いえ", "pronunciation": "いえ (ie)", "meaning": "House", "example": "私の家は大きいです。 (わたしのいえはおおきいです) – My house is big." },
+    { "word": "いす", "pronunciation": "いす (isu)", "meaning": "Chair", "example": "ここに椅子があります。 (ここにいすがあります) – There is a chair here." },
+    { "word": "うえ", "pronunciation": "うえ (ue)", "meaning": "Up, above", "example": "本はテーブルの上にあります。 (ほんはてーぶるのうえにあります) – The book is on the table." },
+    { "word": "うた", "pronunciation": "うた (uta)", "meaning": "Song", "example": "私は歌が好きです。 (わたしはうたがすきです) – I like songs." },
+    { "word": "うみ", "pronunciation": "うみ (umi)", "meaning": "Sea, ocean", "example": "夏休みに海に行きました。 (なつやすみにうみにいきました) – I went to the sea during the summer vacation." },
+    { "word": "えき", "pronunciation": "えき (eki)", "meaning": "Station", "example": "駅はどこですか？ (えきはどこですか) – Where is the station?" },
+    { "word": "おおきい", "pronunciation": "おおきい (ookii)", "meaning": "Big, large", "example": "おおきい家に住んでいます。 (おおきいいえにすんでいます) – I live in a big house." },
+    { "word": "おかね", "pronunciation": "おかね (okane)", "meaning": "Money", "example": "お金がありません。 (おかねがありません) – I don't have money." },
+    { "word": "おきる", "pronunciation": "おきる (okiru)", "meaning": "To wake up, to get up", "example": "毎朝早く起きます。 (まいあさはやくおきます) – I wake up early every morning." },
+    { "word": "おちゃ", "pronunciation": "おちゃ (ocha)", "meaning": "Tea", "example": "私はお茶を飲みます。 (わたしはおちゃをのみます) – I drink tea." },
+    { "word": "おとうさん", "pronunciation": "おとうさん (otousan)", "meaning": "Father", "example": "お父さんは仕事をしています。 (おとうさんはしごとをしています) – My father is working." },
+    { "word": "おとうと", "pronunciation": "おとうと (otouto)", "meaning": "Younger brother", "example": "私のおとうとは学校に行きます。 (わたしのおとうとはがっこうにいきます) – My younger brother goes to school." },
+    { "word": "おとこ", "pronunciation": "おとこ (otoko)", "meaning": "Man, male", "example": "彼は男です。 (かれはおとこです) – He is a man." },
+    { "word": "おなか", "pronunciation": "おなか (onaka)", "meaning": "Stomach", "example": "お腹がすきました。 (おなかがすきました) – I’m hungry." },
+    { "word": "おもい", "pronunciation": "おもい (omoi)", "meaning": "Heavy", "example": "この箱は重いです。 (このはこはおもいです) – This box is heavy." },
+    { "word": "およぐ", "pronunciation": "およぐ (oyogu)", "meaning": "To swim", "example": "海で泳ぎます。 (うみでおよぎます) – I swim in the sea." },
+    { "word": "おわる", "pronunciation": "おわる (owaru)", "meaning": "To finish", "example": "授業が終わりました。 (じゅぎょうがおわりました) – The class has finished." },
+    { "word": "おんな", "pronunciation": "おんな (onna)", "meaning": "Woman, female", "example": "彼女は女の人です。 (かのじょはおんなのひとです) – She is a woman." },
+    { "word": "おんなのこ", "pronunciation": "おんなのこ (onnanoko)", "meaning": "Girl", "example": "その女の子は可愛いです。 (そのおんなのこはかわいいです) – That girl is cute." },
+    { "word": "かいしゃ", "pronunciation": "かいしゃ (kaisha)", "meaning": "Company, workplace", "example": "私は会社で働いています。 (わたしはかいしゃではたらいています) – I work at a company." },
+    { "word": "かさ", "pronunciation": "かさ (kasa)", "meaning": "Umbrella", "example": "雨が降っていますので、傘をさします。 (あめがふっていますので、かさをさします) – It is raining, so I will open the umbrella." },
+    { "word": "かぜ", "pronunciation": "かぜ (kaze)", "meaning": "Wind, cold (illness)", "example": "風が強いです。 (かぜがつよいです) – The wind is strong." },
+    { "word": "かぞく", "pronunciation": "かぞく (kazoku)", "meaning": "Family", "example": "私の家族は四人です。 (わたしのかぞくはよにんです) – My family has four people." },
+    { "word": "かた", "pronunciation": "かた (kata)", "meaning": "Person (polite)", "example": "あの方は先生です。 (あのかたはせんせいです) – That person is a teacher." },
+    { "word": "かっこいい", "pronunciation": "かっこいい (kakkoii)", "meaning": "Cool, good-looking", "example": "彼はかっこいいですね。 (かれはかっこいいですね) – He is cool, isn't he?" },
+    { "word": "かばん", "pronunciation": "かばん (kaban)", "meaning": "Bag", "example": "新しいカバンを買いました。 (あたらしいかばんをかいました) – I bought a new bag." },
+    { "word": "かみ", "pronunciation": "かみ (kami)", "meaning": "Paper, god, hair", "example": "髪の毛が長いです。 (かみのけがながいです) – My hair is long." },
+    { "word": "からだ", "pronunciation": "からだ (karada)", "meaning": "Body", "example": "体を大切にしてください。 (からだをたいせつにしてください) – Please take care of your body." },
+    { "word": "き", "pronunciation": "き (ki)", "meaning": "Tree, wood, spirit", "example": "大きな木があります。 (おおきなきがあります) – There is a big tree." },
+    { "word": "きいろ", "pronunciation": "きいろ (kiiro)", "meaning": "Yellow", "example": "きいろい花が咲いています。 (きいろいはながさいています) – Yellow flowers are blooming." },
+    { "word": "きく", "pronunciation": "きく (kiku)", "meaning": "To ask, to listen", "example": "先生に質問を聞きます。 (せんせいにしつもんをききます) – I will ask the teacher a question." },
+    { "word": "きっぷ", "pronunciation": "きっぷ (kippu)", "meaning": "Ticket", "example": "切符を買わないといけません。 (きっぷをかわないといけません) – I must buy a ticket." },
+    { "word": "きょう", "pronunciation": "きょう (kyou)", "meaning": "Today", "example": "今日はとても暑いです。 (きょうはとてもあついです) – Today is very hot." },
+    { "word": "きょうだい", "pronunciation": "きょうだい (kyoudai)", "meaning": "Siblings", "example": "私は三人の兄弟がいます。 (わたしはさんにんのきょうだいがいます) – I have three siblings." },
+    { "word": "きれい", "pronunciation": "きれい (kirei)", "meaning": "Pretty, clean", "example": "この部屋はきれいですね。 (このへやはきれいですね) – This room is clean, isn't it?" },
+    { "word": "きんきゅう", "pronunciation": "きんきゅう (kinkyu)", "meaning": "Emergency", "example": "緊急事態です。 (きんきゅうじたいです) – This is an emergency." },
+    { "word": "くすり", "pronunciation": "くすり (kusuri)", "meaning": "Medicine", "example": "薬を飲んでください。 (くすりをのんでください) – Please take the medicine." },
+    { "word": "くる", "pronunciation": "くる (kuru)", "meaning": "To come", "example": "明日、友達が来ます。 (あした、ともだちがきます) – My friend will come tomorrow." },
+    { "word": "くろ", "pronunciation": "くろ (kuro)", "meaning": "Black", "example": "黒い猫がいます。 (くろいねこがいます) – There is a black cat." },
+    { "word": "けっこう", "pronunciation": "けっこう (kekkou)", "meaning": "Fine, splendid", "example": "けっこうですね。 (けっこうですね) – That's fine." },
+    { "word": "けんか", "pronunciation": "けんか (kenka)", "meaning": "Fight, argument", "example": "兄とけんかしました。 (あにとけんかしました) – I had a fight with my older brother." },
+    { "word": "こい", "pronunciation": "こい (koi)", "meaning": "Love (romantic)", "example": "彼女に恋しています。 (かのじょにこいしています) – I am in love with her." },
+    { "word": "こえ", "pronunciation": "こえ (koe)", "meaning": "Voice", "example": "彼の声は大きいです。 (かれのこえはおおきいです) – His voice is loud." },
+    { "word": "こども", "pronunciation": "こども (kodomo)", "meaning": "Child", "example": "子供は遊んでいます。 (こどもはあそんでいます) – The children are playing." },
+    { "word": "ごはん", "pronunciation": "ごはん (gohan)", "meaning": "Rice, meal", "example": "今日はご飯を作ります。 (きょうはごはんをつくります) – I will make a meal today." },
+    { "word": "さけ", "pronunciation": "さけ (sake)", "meaning": "Alcohol, sake (rice wine)", "example": "日本酒を飲みます。 (にほんしゅをのみます) – I drink sake." },
+    { "word": "さく", "pronunciation": "さく (saku)", "meaning": "To bloom, to bloom", "example": "花が咲きました。 (はながさきました) – The flowers have bloomed." },
+    { "word": "さかな", "pronunciation": "さかな (sakana)", "meaning": "Fish", "example": "私は魚が好きです。 (わたしはさかながすきです) – I like fish." },
+    { "word": "さらいしゅう", "pronunciation": "さらいしゅう (suraishuu)", "meaning": "Next week", "example": "さらいしゅう、旅行に行きます。 (さらいしゅう、りょこうにいきます) – I will go on a trip next week." },
+    { "word": "さむい", "pronunciation": "さむい (samui)", "meaning": "Cold (weather)", "example": "今日は寒いです。 (きょうはさむいです) – It’s cold today." },
+    { "word": "しごと", "pronunciation": "しごと (shigoto)", "meaning": "Work, job", "example": "私は仕事に行きます。 (わたしはしごとにいきます) – I am going to work." },
+    { "word": "しずか", "pronunciation": "しずか (shizuka)", "meaning": "Quiet, calm", "example": "静かな場所が好きです。 (しずかなばしょがすきです) – I like quiet places." },
+    { "word": "しまる", "pronunciation": "しまる (shimaru)", "meaning": "To close, to shut", "example": "店が閉まります。 (みせがしまります) – The store is closing." },
+    { "word": "じしん", "pronunciation": "じしん (jishin)", "meaning": "Earthquake", "example": "地震がありました。 (じしんがありました) – There was an earthquake." },
+    { "word": "じてんしゃ", "pronunciation": "じてんしゃ (jitensha)", "meaning": "Bicycle", "example": "私は自転車に乗ります。 (わたしはじてんしゃにのります) – I ride a bicycle." },
+    { "word": "じむしょ", "pronunciation": "じむしょ (jimusho)", "meaning": "Office", "example": "私は事務所で働いています。 (わたしはじむしょではたらいています) – I work at the office." },
+    { "word": "しんかんせん", "pronunciation": "しんかんせん (shinkansen)", "meaning": "Bullet train", "example": "新幹線で東京に行きます。 (しんかんせんでとうきょうにいきます) – I will go to Tokyo by bullet train." },
+    { "word": "じんじゃ", "pronunciation": "じんじゃ (jinja)", "meaning": "Shrine", "example": "神社にお参りします。 (じんじゃにおまいりします) – I will visit the shrine." },
+    { "word": "しょくじ", "pronunciation": "しょくじ (shokuji)", "meaning": "Meal", "example": "食事をしましょう。 (しょくじをしましょう) – Let’s have a meal." },
+    { "word": "しろ", "pronunciation": "しろ (shiro)", "meaning": "White", "example": "白い雪が降っています。 (しろいゆきがふっています) – White snow is falling." },
+    { "word": "しろい", "pronunciation": "しろい (shiroi)", "meaning": "White", "example": "白いシャツを着ています。 (しろいしゃつをきています) – I am wearing a white shirt." },
+ 
+    { "word": "しんぶん", "pronunciation": "しんぶん (shinbun)", "meaning": "Newspaper", "example": "毎日新聞を読みます。 (まいにちしんぶんをよみます) – I read the newspaper every day." },
+    { "word": "すき", "pronunciation": "すき (suki)", "meaning": "Like", "example": "私は日本語が好きです。 (わたしはにほんごがすきです) – I like Japanese." },
+    { "word": "すくない", "pronunciation": "すくない (sukunai)", "meaning": "Few, little", "example": "ここには人が少ないです。 (ここにはひとがすくないです) – There are few people here." },
+    { "word": "すこし", "pronunciation": "すこし (sukoshi)", "meaning": "A little, a few", "example": "少し待ってください。 (すこしまってください) – Please wait a little." },
+    { "word": "すごい", "pronunciation": "すごい (sugoi)", "meaning": "Amazing, great", "example": "彼はすごいスポーツ選手です。 (かれはすごいすぽーつせんしゅです) – He is an amazing athlete." },
+    { "word": "すみません", "pronunciation": "すみません (sumimasen)", "meaning": "Excuse me, sorry", "example": "すみません、道を教えてください。 (すみません、みちをおしえてください) – Excuse me, can you tell me the way?" },
+    { "word": "せかい", "pronunciation": "せかい (sekai)", "meaning": "World", "example": "世界にはたくさんの国があります。 (せかいにはたくさんのくにがあります) – There are many countries in the world." },
+    { "word": "せんせい", "pronunciation": "せんせい (sensei)", "meaning": "Teacher", "example": "先生は優しいです。 (せんせいはやさしいです) – The teacher is kind." },
+    { "word": "せんたく", "pronunciation": "せんたく (sentaku)", "meaning": "Laundry, washing", "example": "洗濯をします。 (せんたくをします) – I will do the laundry." },
+    { "word": "そうじ", "pronunciation": "そうじ (souji)", "meaning": "Cleaning", "example": "毎週土曜日に掃除をします。 (まいしゅうどようびにそうじをします) – I clean every Saturday." },
+    { "word": "そと", "pronunciation": "そと (soto)", "meaning": "Outside", "example": "外で遊びましょう。 (そとであそびましょう) – Let’s play outside." },
+    { "word": "それ", "pronunciation": "それ (sore)", "meaning": "That (thing)", "example": "それは私の本です。 (それはわたしのほんです) – That is my book." },
+    { "word": "だいじょうぶ", "pronunciation": "だいじょうぶ (daijoubu)", "meaning": "Okay, alright", "example": "大丈夫ですか？ (だいじょうぶですか) – Are you okay?" },
+    { "word": "だいすき", "pronunciation": "だいすき (daisuki)", "meaning": "Love (a lot)", "example": "私は音楽が大好きです。 (わたしはおんがくがだいすきです) – I really love music." },
+    { "word": "たいせつ", "pronunciation": "たいせつ (taisetsu)", "meaning": "Important", "example": "健康はとても大切です。 (けんこうはとてもたいせつです) – Health is very important." },
+    { "word": "たくさん", "pronunciation": "たくさん (takusan)", "meaning": "Many, a lot", "example": "今日はたくさんの人が来ました。 (きょうはたくさんのひとがきました) – A lot of people came today." },
+    { "word": "たてもの", "pronunciation": "たてもの (tatemono)", "meaning": "Building", "example": "新しい建物が建っています。 (あたらしいたてものがたっています) – A new building is being built." },
+    { "word": "たべる", "pronunciation": "たべる (taberu)", "meaning": "To eat", "example": "私は朝ご飯を食べます。 (わたしはあさごはんをたべます) – I eat breakfast." },
+    { "word": "だれ", "pronunciation": "だれ (dare)", "meaning": "Who", "example": "あなたはだれですか？ (あなたはだれですか) – Who are you?" },
+    { "word": "だんだん", "pronunciation": "だんだん (dandan)", "meaning": "Gradually, little by little", "example": "だんだん寒くなってきました。 (だんだんさむくなってきました) – It’s getting colder little by little." },
+    { "word": "ちいさい", "pronunciation": "ちいさい (chiisai)", "meaning": "Small, little", "example": "この店は小さいです。 (このみせはちいさいです) – This shop is small." },
+    { "word": "ちかい", "pronunciation": "ちかい (chikai)", "meaning": "Near, close", "example": "駅はすぐ近いです。 (えきはすぐちかいです) – The station is very close." },
+    { "word": "ちょっと", "pronunciation": "ちょっと (chotto)", "meaning": "A little, a bit", "example": "ちょっと待ってください。 (ちょっとまってください) – Please wait a moment." },
+    { "word": "つく", "pronunciation": "つく (tsuku)", "meaning": "To arrive, to reach", "example": "駅に着きました。 (えきにつきました) – I arrived at the station." },
+    { "word": "つかう", "pronunciation": "つかう (tsukau)", "meaning": "To use", "example": "この道具を使います。 (このどうぐをつかいます) – I will use this tool." },
+    { "word": "つぎ", "pronunciation": "つぎ (tsugi)", "meaning": "Next", "example": "次の駅で降りましょう。 (つぎのえきでおりましょう) – Let’s get off at the next station." },
+    { "word": "つめたい", "pronunciation": "つめたい (tsumetai)", "meaning": "Cold (to the touch)", "example": "冷たい水を飲みます。 (つめたいみずをのみます) – I will drink cold water." },
+    { "word": "でかける", "pronunciation": "でかける (dekakeru)", "meaning": "To go out", "example": "今から出かけます。 (いまからでかけます) – I’m going out now." },
+    { "word": "でんき", "pronunciation": "でんき (denki)", "meaning": "Electricity, light", "example": "電気をつけてください。 (でんきをつけてください) – Please turn on the light." },
+    { "word": "とけい", "pronunciation": "とけい (tokei)", "meaning": "Clock, watch", "example": "時計を見てください。 (とけいをみてください) – Please look at the clock." },
+    { "word": "ともだち", "pronunciation": "ともだち (tomodachi)", "meaning": "Friend", "example": "友達と映画を見ました。 (ともだちとえいがをみました) – I watched a movie with my friend." },
+    { "word": "とる", "pronunciation": "とる (toru)", "meaning": "To take, to capture", "example": "写真を撮ります。 (しゃしんをとります) – I will take a photo." },
+    { "word": "なか", "pronunciation": "なか (naka)", "meaning": "Inside", "example": "部屋の中に入ります。 (へやのなかにはいります) – I will go inside the room." },
+    { "word": "ながい", "pronunciation": "ながい (nagai)", "meaning": "Long", "example": "長い道を歩きました。 (ながいみちをあるきました) – I walked along a long road." },
+    { "word": "なつ", "pronunciation": "なつ (natsu)", "meaning": "Summer", "example": "夏は暑いです。 (なつはあついです) – Summer is hot." },
+    { "word": "なに", "pronunciation": "なに (nani)", "meaning": "What", "example": "あなたは何を食べますか？ (あなたはなにをたべますか) – What will you eat?" },
+    { "word": "なまえ", "pronunciation": "なまえ (namae)", "meaning": "Name", "example": "私の名前は田中です。 (わたしのなまえはたなかです) – My name is Tanaka." },
+    { "word": "なれる", "pronunciation": "なれる (nareru)", "meaning": "To get used to", "example": "日本の生活に慣れました。 (にほんのせいかつになれました) – I have gotten used to life in Japan." },
+    { "word": "ねる", "pronunciation": "ねる (neru)", "meaning": "To sleep, to lie down", "example": "夜は早く寝ます。 (よるははやくねます) – I go to bed early at night." },
+    { "word": "のぼる", "pronunciation": "のぼる (noboru)", "meaning": "To climb, to ascend", "example": "山に登ります。 (やまにのぼります) – I will climb the mountain." },
+    { "word": "のむ", "pronunciation": "のむ (nomu)", "meaning": "To drink", "example": "水を飲みます。 (みずをのみます) – I drink water." },
+    { "word": "はい", "pronunciation": "はい (hai)", "meaning": "Yes", "example": "はい、分かりました。 (はい、わかりました) – Yes, I understand." },
+    { "word": "はいる", "pronunciation": "はいる (hairu)", "meaning": "To enter", "example": "部屋に入ります。 (へやにはいります) – I will enter the room." },
+    { "word": "はしる", "pronunciation": "はしる (hashiru)", "meaning": "To run", "example": "私は公園を走ります。 (わたしはこうえんをはしります) – I run in the park." },
+    { "word": "はたらく", "pronunciation": "はたらく (hataraku)", "meaning": "To work", "example": "私は会社で働いています。 (わたしはかいしゃではたらいています) – I work at a company." },
+    { "word": "はな", "pronunciation": "はな (hana)", "meaning": "Flower", "example": "きれいな花があります。 (きれいなはながあります) – There are beautiful flowers." },
+    { "word": "はなす", "pronunciation": "はなす (hanasu)", "meaning": "To speak, to talk", "example": "日本語を話します。 (にほんごをはなします) – I speak Japanese." },
+    { "word": "はやい", "pronunciation": "はやい (hayai)", "meaning": "Fast, quick", "example": "彼は速いランナーです。 (かれははやいらんなーです) – He is a fast runner." },
+    { "word": "はる", "pronunciation": "はる (haru)", "meaning": "Spring", "example": "春に花が咲きます。 (はるにはながさきます) – Flowers bloom in spring." },
+    
+    { "word": "ばんごはん", "pronunciation": "ばんごはん (bangohan)", "meaning": "Dinner", "example": "晩ご飯を食べました。 (ばんごはんをたべました) – I ate dinner." },
+    { "word": "びょういん", "pronunciation": "びょういん (byouin)", "meaning": "Hospital", "example": "私は病院に行きます。 (わたしはびょういんにいきます) – I am going to the hospital." },
+    { "word": "ひこうき", "pronunciation": "ひこうき (hikouki)", "meaning": "Airplane", "example": "飛行機で旅行します。 (ひこうきでりょこうします) – I will travel by airplane." },
+    { "word": "ひだり", "pronunciation": "ひだり (hidari)", "meaning": "Left", "example": "左に曲がってください。 (ひだりにまがってください) – Please turn left." },
+    { "word": "ひと", "pronunciation": "ひと (hito)", "meaning": "Person", "example": "彼はとても優しい人です。 (かれはとてもやさしいひとです) – He is a very kind person." },
+    { "word": "ひま", "pronunciation": "ひま (hima)", "meaning": "Free time, leisure", "example": "暇な時に映画を見ます。 (ひまなときにえいがをみます) – I watch movies in my free time." },
+    { "word": "ふく", "pronunciation": "ふく (fuku)", "meaning": "Clothes", "example": "新しい服を買いました。 (あたらしいふくをかいました) – I bought new clothes." },
+    { "word": "ふつう", "pronunciation": "ふつう (futsuu)", "meaning": "Normal, usual", "example": "私は普通の人です。 (わたしはふつうのひとです) – I am an ordinary person." },
+    { "word": "ふる", "pronunciation": "ふる (furu)", "meaning": "To fall (rain, snow)", "example": "雨が降っています。 (あめがふっています) – It is raining." },
+    { "word": "ぶん", "pronunciation": "ぶん (bun)", "meaning": "Sentence, text", "example": "この文を読んでください。 (このぶんをよんでください) – Please read this sentence." },
+    { "word": "べんきょう", "pronunciation": "べんきょう (benkyou)", "meaning": "Study", "example": "日本語を勉強しています。 (にほんごをべんきょうしています) – I am studying Japanese." },
+    { "word": "ぼたん", "pronunciation": "ぼたん (botan)", "meaning": "Button", "example": "ボタンを押してください。 (ぼたんをおしてください) – Please press the button." },
+    { "word": "ほう", "pronunciation": "ほう (hou)", "meaning": "Direction, side", "example": "あの方向に行きましょう。 (あのほうこうにいきましょう) – Let’s go in that direction." },
+    { "word": "ほか", "pronunciation": "ほか (hoka)", "meaning": "Other", "example": "他の人と話しましょう。 (ほかのひととはなしましょう) – Let’s talk with other people." },
+    { "word": "ほん", "pronunciation": "ほん (hon)", "meaning": "Book", "example": "私は本を読みます。 (わたしはほんをよみます) – I read books." },
+    { "word": "まいあさ", "pronunciation": "まいあさ (maiasa)", "meaning": "Every morning", "example": "毎朝ジョギングをします。 (まいあさじょぎんぐをします) – I jog every morning." },
+    { "word": "まいにち", "pronunciation": "まいにち (mainichi)", "meaning": "Every day", "example": "毎日勉強します。 (まいにちべんきょうします) – I study every day." },
+    { "word": "まち", "pronunciation": "まち (machi)", "meaning": "Town, city", "example": "私は町で買い物をします。 (わたしはまちでかいものをします) – I go shopping in the city." },
+    { "word": "まつ", "pronunciation": "まつ (matsu)", "meaning": "To wait", "example": "バスを待っています。 (ばすをまっています) – I am waiting for the bus." },
+    { "word": "まっすぐ", "pronunciation": "まっすぐ (massugu)", "meaning": "Straight, directly", "example": "まっすぐ行ってください。 (まっすぐいってください) – Please go straight." },
+    { "word": "まんが", "pronunciation": "まんが (manga)", "meaning": "Manga (Japanese comics)", "example": "漫画を読むのが好きです。 (まんがをよむのがすきです) – I like reading manga." },
+    { "word": "みぎ", "pronunciation": "みぎ (migi)", "meaning": "Right", "example": "右に曲がってください。 (みぎにまがってください) – Please turn right." },
+    { "word": "みせ", "pronunciation": "みせ (mise)", "meaning": "Shop, store", "example": "お店で買い物をします。 (おみせでかいものをします) – I shop at the store." },
+    { "word": "みなさん", "pronunciation": "みなさん (minasan)", "meaning": "Everyone (polite)", "example": "皆さん、こんにちは。 (みなさん、こんにちは) – Hello, everyone." },
+    { "word": "みち", "pronunciation": "みち (michi)", "meaning": "Road, way", "example": "道を歩きます。 (みちをあるきます) – I walk along the road." },
+    { "word": "みる", "pronunciation": "みる (miru)", "meaning": "To see, to look at", "example": "映画を見るのが好きです。 (えいがをみるのがすきです) – I like watching movies." },
+    { "word": "むこう", "pronunciation": "むこう (mukou)", "meaning": "Over there, beyond", "example": "向こうに大きな山があります。 (むこうにおおきなやまがあります) – There is a big mountain over there." },
+    { "word": "むずかしい", "pronunciation": "むずかしい (muzukashii)", "meaning": "Difficult", "example": "日本語は難しいです。 (にほんごはむずかしいです) – Japanese is difficult." },
+    { "word": "め", "pronunciation": "め (me)", "meaning": "Eye", "example": "彼女は目が大きいです。 (かのじょはめがおおきいです) – She has big eyes." },
+    { "word": "めがね", "pronunciation": "めがね (megane)", "meaning": "Glasses", "example": "私は眼鏡をかけています。 (わたしはめがねをかけています) – I wear glasses." },
+    { "word": "もう", "pronunciation": "もう (mou)", "meaning": "Already, more", "example": "もう食べました。 (もうたべました) – I have already eaten." },
+    { "word": "もくてき", "pronunciation": "もくてき (mokuteki)", "meaning": "Purpose, goal", "example": "旅行の目的は観光です。 (りょこうのもくてきはかんこうです) – The purpose of the trip is sightseeing." },
+    { "word": "もの", "pronunciation": "もの (mono)", "meaning": "Thing, object", "example": "これは何のものですか？ (これはなんのものですか) – What is this thing?" },
+    { "word": "やすい", "pronunciation": "やすい (yasui)", "meaning": "Cheap, inexpensive", "example": "この店の服は安いです。 (このみせのふくはやすいです) – The clothes in this store are cheap." },
+    { "word": "やすむ", "pronunciation": "やすむ (yasumu)", "meaning": "To rest, to take a break", "example": "今日は休みです。 (きょうはやすみです) – Today is a holiday." },
+    { "word": "やる", "pronunciation": "やる (yaru)", "meaning": "To do, to perform", "example": "宿題をやります。 (しゅくだいをやります) – I will do my homework." },
+    { "word": "ゆうびんきょく", "pronunciation": "ゆうびんきょく (yuubinkyoku)", "meaning": "Post office", "example": "郵便局に行きます。 (ゆうびんきょくにいきます) – I am going to the post office." },
+    { "word": "よる", "pronunciation": "よる (yoru)", "meaning": "Night", "example": "夜は星が見えます。 (よるはほしがみえます) – You can see stars at night." },
+    { "word": "らいしゅう", "pronunciation": "らいしゅう (raishuu)", "meaning": "Next week", "example": "来週は旅行に行きます。 (らいしゅうはりょこうにいきます) – I will go on a trip next week." },
+    { "word": "らいねん", "pronunciation": "らいねん (rainen)", "meaning": "Next year", "example": "来年、東京に行きます。 (らいねん、とうきょうにいきます) – I will go to Tokyo next year." },
+    { "word": "りんご", "pronunciation": "りんご (ringo)", "meaning": "Apple", "example": "私はリンゴが好きです。 (わたしはりんごがすきです) – I like apples." },
+    { "word": "わかる", "pronunciation": "わかる (wakaru)", "meaning": "To understand, to know", "example": "日本語がわかります。 (にほんごがわかります) – I understand Japanese." },
+    { "word": "わたし", "pronunciation": "わたし (watashi)", "meaning": "I, me (formal)", "example": "私は日本から来ました。 (わたしはにほんからきました) – I come from Japan." },
+    { "word": "わるい", "pronunciation": "わるい (warui)", "meaning": "Bad", "example": "悪いことをしました。 (わるいことをしました) – I did something bad." },
+ { "word": "あい", "pronunciation": "あい (ai)", "meaning": "Love", "example": "私は愛を信じています。 (わたしはあいをしんじています) – I believe in love." },
+    { "word": "あお", "pronunciation": "あお (ao)", "meaning": "Blue", "example": "空は青いです。 (そらはあおいです) – The sky is blue." },
+    { "word": "あさ", "pronunciation": "あさ (asa)", "meaning": "Morning", "example": "朝ご飯を食べます。 (あさごはんをたべます) – I eat breakfast in the morning." },
+    { "word": "あし", "pronunciation": "あし (ashi)", "meaning": "Leg, foot", "example": "足が痛いです。 (あしがいたいです) – My leg hurts." },
+    { "word": "あたま", "pronunciation": "あたま (atama)", "meaning": "Head", "example": "頭が痛いです。 (あたまがいたいです) – I have a headache." },
+    { "word": "あたらしい", "pronunciation": "あたらしい (atarashii)", "meaning": "New", "example": "新しいカバンを買いました。 (あたらしいかばんをかいました) – I bought a new bag." },
+    { "word": "あに", "pronunciation": "あに (ani)", "meaning": "Older brother", "example": "私の兄はサッカーが得意です。 (わたしのあにはさっかーがとくいです) – My older brother is good at soccer." },
+    { "word": "あの", "pronunciation": "あの (ano)", "meaning": "That (over there)", "example": "あの店はおいしいラーメンがあります。 (あのみせはおいしいらーめんがあります) – That shop has delicious ramen." },
+    { "word": "あまり", "pronunciation": "あまり (amari)", "meaning": "Not very, not much", "example": "あまり運動しません。 (あまりうんどうしません) – I don’t exercise much." },
+    { "word": "あめ", "pronunciation": "あめ (ame)", "meaning": "Rain, candy", "example": "今日は雨です。 (きょうはあめです) – It’s raining today." },
+    { "word": "ある", "pronunciation": "ある (aru)", "meaning": "To be (for inanimate objects)", "example": "机の上に本があります。 (つくえのうえにほんがあります) – There is a book on the desk." },
+    { "word": "あんまり", "pronunciation": "あんまり (anmari)", "meaning": "Not much (negative)", "example": "あんまりお金がありません。 (あんまりおかねがありません) – I don’t have much money." },
+    { "word": "いい", "pronunciation": "いい (ii)", "meaning": "Good", "example": "今日はいい天気ですね。 (きょうはいいてんきですね) – The weather is nice today." },
+    { "word": "いえ", "pronunciation": "いえ (ie)", "meaning": "House, home", "example": "家に帰ります。 (いえにかえります) – I will go home." },
+    { "word": "いく", "pronunciation": "いく (iku)", "meaning": "To go", "example": "学校に行きます。 (がっこうにいきます) – I go to school." },
+    { "word": "いけ", "pronunciation": "いけ (ike)", "meaning": "Pond", "example": "池に魚がいます。 (いけにさかながいます) – There are fish in the pond." },
+    { "word": "いしゃ", "pronunciation": "いしゃ (isha)", "meaning": "Doctor", "example": "私は医者に行きました。 (わたしはいしゃにいきました) – I went to the doctor." },
+    { "word": "いす", "pronunciation": "いす (isu)", "meaning": "Chair", "example": "椅子に座ってください。 (いすにすわってください) – Please sit on the chair." },
+    { "word": "いたい", "pronunciation": "いたい (itai)", "meaning": "Painful, hurt", "example": "足が痛いです。 (あしがいたいです) – My foot hurts." },
+    { "word": "いち", "pronunciation": "いち (ichi)", "meaning": "One", "example": "一つください。 (ひとつください) – Please give me one." },
+    { "word": "いちばん", "pronunciation": "いちばん (ichiban)", "meaning": "Best, number one", "example": "これは一番好きな食べ物です。 (これはいちばんすきなたべものです) – This is my favorite food." },
+    { "word": "いつ", "pronunciation": "いつ (itsu)", "meaning": "When", "example": "いつ日本に行きますか？ (いつにほんにいきますか) – When are you going to Japan?" },
+    { "word": "いつも", "pronunciation": "いつも (itsumo)", "meaning": "Always", "example": "私はいつも早起きします。 (わたしはいつもはやおきします) – I always wake up early." },
+    { "word": "いぬ", "pronunciation": "いぬ (inu)", "meaning": "Dog", "example": "犬が好きです。 (いぬがすきです) – I like dogs." },
+    { "word": "いもうと", "pronunciation": "いもうと (imouto)", "meaning": "Younger sister", "example": "妹はピアノが得意です。 (いもうとはぴあのがとくいです) – My younger sister is good at the piano." },
+    { "word": "いらっしゃいませ", "pronunciation": "いらっしゃいませ (irasshaimase)", "meaning": "Welcome (used by shopkeepers)", "example": "いらっしゃいませ！ (いらっしゃいませ) – Welcome!" },
+    { "word": "いろ", "pronunciation": "いろ (iro)", "meaning": "Color", "example": "好きな色は青です。 (すきないろはあおです) – My favorite color is blue." },
+    { "word": "うえ", "pronunciation": "うえ (ue)", "meaning": "Above, on top", "example": "本棚の上に猫がいます。 (ほんだなのうえにねこがいます) – There is a cat on top of the bookshelf." },
+    { "word": "うしろ", "pronunciation": "うしろ (ushiro)", "meaning": "Behind", "example": "後ろに誰かいます。 (うしろにだれかいます) – There is someone behind you." },
+    { "word": "うた", "pronunciation": "うた (uta)", "meaning": "Song", "example": "日本の歌を歌います。 (にほんのうたをうたいます) – I sing Japanese songs." },
+    { "word": "うち", "pronunciation": "うち (uchi)", "meaning": "Home, house", "example": "うちに帰ります。 (うちにかえります) – I’m going home." },
+    { "word": "うま", "pronunciation": "うま (uma)", "meaning": "Horse", "example": "馬は速い動物です。 (うまははやいどうぶつです) – A horse is a fast animal." },
+    { "word": "うる", "pronunciation": "うる (uru)", "meaning": "To sell", "example": "私は本を売ります。 (わたしはほんをうります) – I will sell books." },
+    { "word": "え", "pronunciation": "え (e)", "meaning": "Picture, drawing", "example": "絵を描くのが好きです。 (えをかくのがすきです) – I like drawing pictures." },
+    { "word": "えいが", "pronunciation": "えいが (eiga)", "meaning": "Movie", "example": "映画を見に行きます。 (えいがをみにいきます) – I am going to watch a movie." },
+    { "word": "えき", "pronunciation": "えき (eki)", "meaning": "Station", "example": "駅で待ち合わせしましょう。 (えきでまちあわせしましょう) – Let’s meet at the station." },
+    { "word": "おいしい", "pronunciation": "おいしい (oishii)", "meaning": "Delicious", "example": "このラーメンはおいしいです。 (このらーめんはおいしいです) – This ramen is delicious." },
+    { "word": "おおきい", "pronunciation": "おおきい (ookii)", "meaning": "Big", "example": "大きい犬がいます。 (おおきいいぬがいます) – There is a big dog." },
+    { "word": "おかあさん", "pronunciation": "おかあさん (okaasan)", "meaning": "Mother", "example": "お母さんは料理が得意です。 (おかあさんはりょうりがとくいです) – My mother is good at cooking." },
+    { "word": "おきる", "pronunciation": "おきる (okiru)", "meaning": "To wake up, to get up", "example": "毎朝6時に起きます。 (まいあさろくじにおきます) – I wake up at 6 AM every morning." },
+    { "word": "おく", "pronunciation": "おく (oku)", "meaning": "To put, to place", "example": "テーブルの上に本を置きます。 (てーぶるのうえにほんをおきます) – I will put the book on the table." },
+    { "word": "おくさん", "pronunciation": "おくさん (okusan)", "meaning": "Wife (respectful)", "example": "お客様は奥さんと一緒に来ました。 (おきゃくさまはおくさんといっしょにきました) – The customer came with his wife." },
+    { "word": "おじさん", "pronunciation": "おじさん (ojisan)", "meaning": "Uncle", "example": "おじさんはサラリーマンです。 (おじさんはさらりーまんです) – My uncle is a salaryman." },
+    { "word": "おす", "pronunciation": "おす (osu)", "meaning": "To press, to push", "example": "ボタンを押してください。 (ぼたんをおしてください) – Please press the button." },
+    { "word": "おとうさん", "pronunciation": "おとうさん (otousan)", "meaning": "Father", "example": "お父さんは会社員です。 (おとうさんはかいしゃいんです) – My father is a company employee." },
+    { "word": "おとうと", "pronunciation": "おとうと (otouto)", "meaning": "Younger brother", "example": "弟はサッカーが得意です。 (おとうとはさっかーがとくいです) – My younger brother is good at soccer." },
+    { "word": "おなか", "pronunciation": "おなか (onaka)", "meaning": "Stomach", "example": "お腹がすきました。 (おなかがすきました) – I’m hungry." },
+    { "word": "おなじ", "pronunciation": "おなじ (onaji)", "meaning": "Same", "example": "これは私と同じ色です。 (これはわたしとおなじいろです) – This is the same color as mine." },
+    { "word": "おふろ", "pronunciation": "おふろ (ofuro)", "meaning": "Bath", "example": "お風呂に入りました。 (おふろにはいりました) – I took a bath." },
+    { "word": "おもい", "pronunciation": "おもい (omoi)", "meaning": "Heavy", "example": "この荷物は重いです。 (このにもつはおもいです) – This luggage is heavy." },
+    { "word": "おもちゃ", "pronunciation": "おもちゃ (omocha)", "meaning": "Toy", "example": "子供はおもちゃで遊んでいます。 (こどもはおもちゃであそんでいます) – The children are playing with toys." },
+    { "word": "およぐ", "pronunciation": "およぐ (oyogu)", "meaning": "To swim", "example": "夏に海で泳ぎます。 (なつにうみでおよぎます) – I swim in the sea in summer." },
+    { "word": "おりる", "pronunciation": "おりる (oriru)", "meaning": "To get off, to descend", "example": "バスを降りましょう。 (ばすをおりましょう) – Let’s get off the bus." },
+    { "word": "おわる", "pronunciation": "おわる (owaru)", "meaning": "To finish, to end", "example": "授業が終わりました。 (じゅぎょうがおわりました) – The class is over." },
+    { "word": "おんがく", "pronunciation": "おんがく (ongaku)", "meaning": "Music", "example": "音楽を聞くのが好きです。 (おんがくをきくのがすきです) – I like listening to music." },
+    { "word": "かい", "pronunciation": "かい (kai)", "meaning": "Times, times of occurrence", "example": "一日に三回食事をします。 (いちにちにさんかいしょくじをします) – I eat three times a day." },
+    { "word": "かいしゃ", "pronunciation": "かいしゃ (kaisha)", "meaning": "Company", "example": "私は会社員です。 (わたしはかいしゃいんです) – I am a company employee." },
+    { "word": "かう", "pronunciation": "かう (kau)", "meaning": "To buy", "example": "スーパーで野菜を買います。 (すーぱーでやさいをかいます) – I buy vegetables at the supermarket." },
+    { "word": "かえす", "pronunciation": "かえす (kaesu)", "meaning": "To return (something)", "example": "本を図書館に返しました。 (ほんをとしょかんにかえしました) – I returned the book to the library." },
+    { "word": "かお", "pronunciation": "かお (kao)", "meaning": "Face", "example": "彼は顔が赤いです。 (かれはかおがあかいです) – His face is red." },
+    { "word": "かぎ", "pronunciation": "かぎ (kagi)", "meaning": "Key", "example": "鍵を忘れました。 (かぎをわすれました) – I forgot the key." },
+    { "word": "かく", "pronunciation": "かく (kaku)", "meaning": "To write", "example": "手紙を書きます。 (てがみをかきます) – I will write a letter." },
+    { "word": "かける", "pronunciation": "かける (kakeru)", "meaning": "To wear (glasses), to call", "example": "電話をかけます。 (でんわをかけます) – I will make a phone call." },
+    { "word": "かぞく", "pronunciation": "かぞく (kazoku)", "meaning": "Family", "example": "私の家族は四人です。 (わたしのかぞくはよにんです) – My family has four people." },
+    { "word": "かた", "pronunciation": "かた (kata)", "meaning": "Person (polite)", "example": "あの方は先生です。 (あのかたはせんせいです) – That person is a teacher." },
+    { "word": "かたち", "pronunciation": "かたち (katachi)", "meaning": "Shape, form", "example": "この箱は丸い形です。 (このはこはまるいかたちです) – This box is round." },
+    { "word": "かつ", "pronunciation": "かつ (katsu)", "meaning": "To win", "example": "試合に勝ちました。 (しあいにかちました) – We won the match." },
+    { "word": "かっこいい", "pronunciation": "かっこいい (kakkoii)", "meaning": "Cool, good-looking", "example": "彼はかっこいいですね。 (かれはかっこいいですね) – He is cool." },
+    { "word": "かばん", "pronunciation": "かばん (kaban)", "meaning": "Bag", "example": "新しいカバンを買いました。 (あたらしいかばんをかいました) – I bought a new bag." },
+    { "word": "かぶる", "pronunciation": "かぶる (kaburu)", "meaning": "To wear (on head)", "example": "帽子をかぶっています。 (ぼうしをかぶっています) – I am wearing a hat." },
+    { "word": "からだ", "pronunciation": "からだ (karada)", "meaning": "Body", "example": "体を鍛えています。 (からだをきたえています) – I am working on my body (exercising)." },
+    { "word": "かりる", "pronunciation": "かりる (kariru)", "meaning": "To borrow", "example": "友達から本を借りました。 (ともだちからほんをかりました) – I borrowed a book from a friend." },
+    { "word": "かんたん", "pronunciation": "かんたん (kantan)", "meaning": "Easy, simple", "example": "この問題は簡単です。 (このもんだいはかんたんです) – This problem is easy." },
+    { "word": "き", "pronunciation": "き (ki)", "meaning": "Tree, wood", "example": "木がたくさんあります。 (きがたくさんあります) – There are many trees." },
+    { "word": "きく", "pronunciation": "きく (kiku)", "meaning": "To ask, to listen", "example": "先生に質問を聞きます。 (せんせいにしつもんをききます) – I will ask the teacher a question." },
+    { "word": "きた", "pronunciation": "きた (kita)", "meaning": "North", "example": "北に行きます。 (きたにいきます) – I am going north." },
+    { "word": "きたない", "pronunciation": "きたない (kitanai)", "meaning": "Dirty", "example": "部屋がきたないです。 (へやがきたないです) – The room is dirty." },
+    { "word": "きっさてん", "pronunciation": "きっさてん (kissaten)", "meaning": "Coffee shop", "example": "カフェで友達と会います。 (かふぇともだちとあいます) – I will meet my friend at the coffee shop." },
+    { "word": "きゅう", "pronunciation": "きゅう (kyuu)", "meaning": "Nine", "example": "私は九時に起きます。 (わたしはくじにおきます) – I wake up at 9 o'clock." },
+    { "word": "きょう", "pronunciation": "きょう (kyou)", "meaning": "Today", "example": "今日は天気がいいです。 (きょうはてんきがいいです) – The weather is nice today." },
+    { "word": "きょねん", "pronunciation": "きょねん (kyonen)", "meaning": "Last year", "example": "去年、旅行に行きました。 (きょねん、りょこうにいきました) – I went on a trip last year." },
+    { "word": "きょうだい", "pronunciation": "きょうだい (kyoudai)", "meaning": "Siblings", "example": "私には兄弟が三人います。 (わたしにはきょうだいがさんにんいます) – I have three siblings." },
+    { "word": "きれい", "pronunciation": "きれい (kirei)", "meaning": "Pretty, clean", "example": "彼女はきれいです。 (かのじょはきれいです) – She is pretty." },
+    { "word": "きる", "pronunciation": "きる (kiru)", "meaning": "To wear, to put on", "example": "シャツを着ています。 (しゃつをきています) – I am wearing a shirt." },
+    { "word": "きんぎょ", "pronunciation": "きんぎょ (kingyo)", "meaning": "Goldfish", "example": "金魚を飼っています。 (きんぎょをかっています) – I am keeping a goldfish." },
+    { "word": "きんようび", "pronunciation": "きんようび (kinyoubi)", "meaning": "Friday", "example": "金曜日に会いましょう。 (きんようびにあいましょう) – Let’s meet on Friday." },
+    { "word": "くる", "pronunciation": "くる (kuru)", "meaning": "To come", "example": "明日、友達が来ます。 (あした、ともだちがきます) – My friend is coming tomorrow." },
+    { "word": "けっこん", "pronunciation": "けっこん (kekkon)", "meaning": "Marriage", "example": "来週、結婚式があります。 (らいしゅう、けっこんしきがあります) – There is a wedding next week." }
+
+
+
+
+    ];
+
+    // Function to create a word card
+    function createWordCard(wordObj) {
+        const card = document.createElement('div');
+        card.classList.add('word-card');
+        card.innerHTML = `
+            <h3>${wordObj.word}</h3>
+            <p><strong>Pronunciation:</strong> ${wordObj.pronunciation}</p>
+            <p><strong>Meaning:</strong> ${wordObj.meaning}</p>
+            <p class="example">Example: <em>${wordObj.example}</em></p>
+        `;
+        return card;
+    }
+
+    // Function to display all words
+    function displayWords(words) {
+        const wordContainer = document.getElementById('wordContainer');
+        words.forEach(wordObj => {
+            const card = createWordCard(wordObj);
+            wordContainer.appendChild(card);
+        });
+    }
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', function() {
+        const searchText = searchInput.value.toLowerCase();
+        const filteredWords = words.filter(word => word.word.toLowerCase().includes(searchText));
+        document.getElementById('wordContainer').innerHTML = ''; // Clear previous results
+        displayWords(filteredWords);
+    });
+
+    // Initial display of all words
+    displayWords(words);
+</script>
+
+</body>
+</html>

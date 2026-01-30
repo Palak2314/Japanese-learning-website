@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanji Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500&display=swap'); /* Japanese-inspired serif font */
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0); /* Soft sakura pink gradient */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #b71c1c; /* Deep red */
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-family: 'Great Vibes', cursive; /* Japanese-inspired cursive font */
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+            background: #fff0f5; /* Light pink */
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #b71c1c; /* Red border */
+            position: relative;
+        }
+        .quiz-container::before, .quiz-container::after {
+            content: "";
+            width: 100px;
+            height: 100px;
+            background-image: url('https://www.transparenttextures.com/patterns/japanese-cube.png'); /* Japanese cube pattern */
+            opacity: 0.2;
+            position: absolute;
+            background-size: 20px;
+        }
+        .quiz-container::before {
+            top: -20px;
+            left: -20px;
+        }
+        .quiz-container::after {
+            bottom: -20px;
+            right: -20px;
+        }
+        .kanji-question {
+            font-size: 4em;
+            margin: 20px 0;
+            color: #d32f2f;
+            font-family: 'Noto Serif JP', serif; /* Japanese-inspired serif font for Kanji characters */
+        }
+        input[type="text"] {
+            padding: 12px;
+            font-size: 1em;
+            width: 80%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .button {
+            background-color: #d32f2f; /* Dark red button */
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #e57373; /* Lighter red on hover */
+        }
+        .result {
+            font-size: 1.3em;
+            margin-top: 15px;
+            color: #388e3c; /* Green for correct/incorrect result text */
+        }
+    </style>
+</head>
+<body>
+    <h1>Kanji Quiz</h1>
+    <div class="quiz-container">
+        <div class="kanji-question" id="kanji"></div>
+        <input type="text" id="answer" placeholder="Enter the meaning" onkeypress="handleKeyPress(event)" />
+        <button class="button" onclick="checkAnswer()">Submit</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const kanjiList = [
+            { character: "一", meaning: "one" },
+            { character: "二", meaning: "two" },
+            { character: "三", meaning: "three" },
+            { character: "四", meaning: "four" },
+            { character: "五", meaning: "five" },
+            { character: "六", meaning: "six" },
+            { character: "七", meaning: "seven" },
+            { character: "八", meaning: "eight" },
+            { character: "九", meaning: "nine" },
+            { character: "十", meaning: "ten" },
+            { character: "百", meaning: "hundred" },
+            { character: "千", meaning: "thousand" },
+            { character: "万", meaning: "ten thousand" },
+            { character: "円", meaning: "yen" },
+            { character: "人", meaning: "person" },
+            { character: "子", meaning: "child" },
+            { character: "女", meaning: "woman" },
+            { character: "男", meaning: "man" },
+            { character: "母", meaning: "mother" },
+            { character: "父", meaning: "father" },
+            { character: "上", meaning: "up" },
+            { character: "下", meaning: "down" },
+            { character: "左", meaning: "left" },
+            { character: "右", meaning: "right" },
+            { character: "中", meaning: "middle" },
+            { character: "小", meaning: "small" },
+            { character: "大", meaning: "big" },
+            { character: "山", meaning: "mountain" },
+            { character: "川", meaning: "river" },
+            { character: "田", meaning: "rice field" },
+            { character: "学", meaning: "study" },
+            { character: "校", meaning: "school" },
+            { character: "天", meaning: "heaven" },
+            { character: "空", meaning: "sky" },
+            { character: "日", meaning: "day" },
+            { character: "月", meaning: "month" },
+            { character: "火", meaning: "fire" },
+            { character: "水", meaning: "water" },
+            { character: "木", meaning: "tree" },
+            { character: "金", meaning: "gold" },
+            { character: "土", meaning: "earth" },
+            { character: "生", meaning: "life" },
+            { character: "何", meaning: "what" },
+            { character: "年", meaning: "year" },
+            { character: "時", meaning: "time" },
+            { character: "分", meaning: "minute" },
+            { character: "週", meaning: "week" },
+            { character: "今", meaning: "now" },
+            { character: "行", meaning: "go" },
+            { character: "来", meaning: "come" },
+            { character: "見", meaning: "see" },
+            { character: "食", meaning: "eat" },
+            { character: "飲", meaning: "drink" },
+            { character: "話", meaning: "speak" },
+            { character: "聞", meaning: "hear" },
+            { character: "買", meaning: "buy" },
+            { character: "売", meaning: "sell" },
+            { character: "出", meaning: "exit" },
+            { character: "入", meaning: "enter" },
+            { character: "立", meaning: "stand" },
+            { character: "使", meaning: "use" },
+            { character: "作", meaning: "make" },
+            { character: "住", meaning: "live" },
+            { character: "知", meaning: "know" },
+            { character: "言", meaning: "say" },
+            { character: "思", meaning: "think" },
+            { character: "心", meaning: "heart" },
+            { character: "白", meaning: "white" },
+            { character: "黒", meaning: "black" },
+            { character: "赤", meaning: "red" },
+            { character: "青", meaning: "blue" },
+            { character: "茶", meaning: "brown" },
+            { character: "色", meaning: "color" },
+            { character: "好", meaning: "like" },
+            { character: "嫌", meaning: "dislike" },
+            { character: "名", meaning: "name" },
+            { character: "物", meaning: "thing" },
+            { character: "道", meaning: "way" },
+            { character: "車", meaning: "car" },
+            { character: "電", meaning: "electricity" },
+            { character: "駅", meaning: "station" },
+            { character: "社", meaning: "company" },
+            { character: "店", meaning: "shop" },
+            { character: "場", meaning: "place" },
+            { character: "用", meaning: "use" },
+            { character: "際", meaning: "occasion" },
+            { character: "客", meaning: "guest" }
+        ];
+
+        function displayQuestion() {
+            const randomIndex = Math.floor(Math.random() * kanjiList.length);
+            document.getElementById("kanji").innerText = kanjiList[randomIndex].character;
+            document.getElementById("result").innerText = "";
+            document.getElementById("answer").value = "";
+            currentIndex = randomIndex;
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
+            const correctAnswer = kanjiList[currentIndex].meaning;
+
+            if (userAnswer === correctAnswer) {
+                document.getElementById("result").innerText = "Correct!";
+            } else {
+                document.getElementById("result").innerText = `Incorrect. The correct answer is "${correctAnswer}".`;
+            }
+
+            setTimeout(displayQuestion, 2000);
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+
+        window.onload = displayQuestion;
+    </script>
+</body>
+</html>
